@@ -17,7 +17,7 @@ class FriendProfileController: UIViewController {
         didSet { fetchStatus() }
     }
     
-    private var isShortFormEnabled = true
+    private var guestBool: Bool!
     
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -48,6 +48,7 @@ class FriendProfileController: UIViewController {
     }()
     private let fullnameLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .black
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
@@ -61,7 +62,7 @@ class FriendProfileController: UIViewController {
         return label
     }()
     
-    private let callButton: UIButton = {
+    private lazy var callButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.setTitle("Call", for: .normal)
@@ -71,10 +72,11 @@ class FriendProfileController: UIViewController {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.systemPurple.cgColor
         button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(handleCall), for: .touchUpInside)
         return button
     }()
     
-    private let videoButton: UIButton = {
+    private lazy var videoButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .systemPurple
         button.setTitle("Video", for: .normal)
@@ -84,6 +86,7 @@ class FriendProfileController: UIViewController {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.systemPurple.cgColor
         button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(handleVideo), for: .touchUpInside)
         return button
     }()
     
@@ -103,13 +106,41 @@ class FriendProfileController: UIViewController {
         configureUI()
         populateUserData()
         fetchStatus()
+        guestOrNot()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+    //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
+    }
+    
+    private func uploadCallingIndicator() {
+        guard let toUid = self.user?.uid else { return }
+        CallingService.uploadCallingIndicator(toUid: toUid) { _ in
+        }
+    }
+    
     //MARK: - Actions
+    
+    @objc func handleCall() {
+        tbd()
+    }
+    
+    @objc func handleVideo() {
+        if self.guestBool {
+            guestAlert()
+        } else {
+            presentVideoController()
+            uploadCallingIndicator()
+        }
+    }
     
     //MARK: - Helpers
     
@@ -149,7 +180,6 @@ class FriendProfileController: UIViewController {
         guard let uid = self.user?.uid else { return }
         StatusService.fetchStatus(withUid: uid) { status in
             self.statusLabel.text = status.status
-            print("DEBUG: STATUS IS \(status.status)")
         }
     }
     
@@ -159,6 +189,15 @@ class FriendProfileController: UIViewController {
         fullnameLabel.text = user.fullname
         usernameLabel.text = user.username
         profileImageView.sd_setImage(with: url, completed: nil)
+    }
+    
+    private func presentVideoController() {
+        let controller = VideoController()
+        controller.user = user
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalTransitionStyle = .crossDissolve
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
     }
 }
 
@@ -170,23 +209,18 @@ extension FriendProfileController: PanModalPresentable {
     }
 
     var shortFormHeight: PanModalHeight {
-        return isShortFormEnabled ? .contentHeight(320.0) : longFormHeight
+        return .contentHeight(320)
+    }
+    
+    var longFormHeight: PanModalHeight {
+        return .contentHeight(320)
     }
 
     var anchorModalToLongForm: Bool {
         return false
     }
 
-    func shouldPrioritize(panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
-        let location = panModalGestureRecognizer.location(in: view)
-        return view.frame.contains(location)
-    }
-
-    func willTransition(to state: PanModalPresentationController.PresentationState) {
-        guard isShortFormEnabled, case .longForm = state
-            else { return }
-
-        isShortFormEnabled = false
-        panModalSetNeedsLayoutUpdate()
+    var showDragIndicator: Bool {
+        return false
     }
 }

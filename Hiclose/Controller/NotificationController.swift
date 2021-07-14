@@ -12,7 +12,7 @@ import Firebase
 private let headerIdentifier = "HeaderView"
 private let cellIdentifier = "NotificationCell"
 
-protocol NotificationControllerDelegate: class {
+protocol NotificationControllerDelegate: AnyObject {
     func controller(wantsToStartChatFromNotifController user: User)
 }
 
@@ -27,6 +27,7 @@ class NotificationController: UITableViewController {
     }
     private var user: User?
     
+    private let notifCell = NotificationCell()
     private let headerView = NotificationHeader()
     private var isShortFormEnabled = true
     private let refresher = UIRefreshControl()
@@ -34,7 +35,7 @@ class NotificationController: UITableViewController {
     private var ifNoNotifLabel: UILabel = {
         let label = UILabel()
         label.isHidden = true
-        label.text = "You have no Notifications👀"
+        label.text = "No Notifications yet👀"
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -140,7 +141,7 @@ extension NotificationController {
 
 extension NotificationController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -185,6 +186,20 @@ extension NotificationController: PanModalPresentable {
 //MARK: - NOtificationCellDelelgate
 
 extension NotificationController: NotificationCellDelegate {
+    func presentGuestAlert() {
+        let alert = UIAlertController(title: "✋🏽Oops✋🏽",
+                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!!",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Sing In", style: .default, handler: { _ in
+            let controller = IntroController()
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     func cell(_ cell: NotificationCell, wantsToStartChatWith user: User) {
         delegate?.controller(wantsToStartChatFromNotifController: user)
     }

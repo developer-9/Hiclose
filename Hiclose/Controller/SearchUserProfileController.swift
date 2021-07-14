@@ -17,8 +17,8 @@ class SearchUserProfileController: UIViewController {
         didSet { configureRequestButton() }
     }
     
+    private var guestBool: Bool!
     private var currentUser: User!
-    private var isShortFormEnabled = true
     
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -29,6 +29,7 @@ class SearchUserProfileController: UIViewController {
 
     private let fullnameLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .black
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
@@ -73,6 +74,7 @@ class SearchUserProfileController: UIViewController {
         populateUserData()
         checkIfUserIsRequested()
         fetchCurrentUser()
+        guestOrNot()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -80,6 +82,12 @@ class SearchUserProfileController: UIViewController {
     }
     
     //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
+    }
     
     private func fetchCurrentUser() {
         guard let currentUser = Auth.auth().currentUser?.uid else { return }
@@ -92,7 +100,6 @@ class SearchUserProfileController: UIViewController {
         guard let user = viewModel?.user else { return }
         FriendService.checkIfUserIsRequested(uid: user.uid) { isRequested in
             self.viewModel?.user.isRequested = isRequested
-            print("DEBUG: \(user.fullname) IS \(isRequested)")
             self.view.reloadInputViews()
         }
     }
@@ -100,19 +107,24 @@ class SearchUserProfileController: UIViewController {
     //MARK: - Actions
     
     @objc func handleFriendRequest() {
-        guard viewModel?.user.isRequested == false else { return }
-        guard let uid = viewModel?.user.uid else { return }
-        FriendService.friendRequest(withUid: uid) { error in
-            self.viewModel?.user.isRequested = true
-            self.configureRequestButton()
-            NotificationService.uploadNotification(toUid: uid, fromUser: self.currentUser,
-                                                   type: .friendRequest) { error in
-                if let error = error {
-                    print("DEBUG: FAILED TO UPLOAD NOTIFICATION \(error.localizedDescription)")
-                    return
+        if self.guestBool {
+            guestAlert()
+        } else {
+            guard viewModel?.user.isRequested == false else { return }
+            guard let uid = viewModel?.user.uid else { return }
+            FriendService.friendRequest(withUid: uid) { error in
+                self.viewModel?.user.isRequested = true
+                self.configureRequestButton()
+                NotificationService.uploadNotification(toUid: uid, fromUser: self.currentUser,
+                                                       type: .friendRequest) { error in
+                    if let error = error {
+                        print("DEBUG: FAILED TO UPLOAD NOTIFICATION \(error.localizedDescription)")
+                        return
+                    }
                 }
             }
         }
+        
     }
     
     //MARK: - Helpers
@@ -163,24 +175,19 @@ extension SearchUserProfileController: PanModalPresentable {
     }
 
     var shortFormHeight: PanModalHeight {
-        return isShortFormEnabled ? .contentHeight(320.0) : longFormHeight
+        return .contentHeight(320)
+    }
+    
+    var longFormHeight: PanModalHeight {
+        return .contentHeight(320)
     }
 
     var anchorModalToLongForm: Bool {
         return false
     }
-
-    func shouldPrioritize(panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
-        let location = panModalGestureRecognizer.location(in: view)
-        return view.frame.contains(location)
-    }
-
-    func willTransition(to state: PanModalPresentationController.PresentationState) {
-        guard isShortFormEnabled, case .longForm = state
-            else { return }
-
-        isShortFormEnabled = false
-        panModalSetNeedsLayoutUpdate()
+    
+    var showDragIndicator: Bool {
+        return false
     }
 }
 

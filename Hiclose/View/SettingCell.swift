@@ -20,7 +20,7 @@ class AccountCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.init(name: "GillSans-Semibold", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
     
@@ -75,7 +75,7 @@ class InfoCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.init(name: "GillSans-Semibold", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
     
@@ -130,7 +130,7 @@ class ActionCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = UIFont.init(name: "GillSans-Semibold", size: 16)
+        label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
     

@@ -7,8 +7,9 @@
 
 import UIKit
 
-protocol ProfileFooterDelegate: class {
+protocol ProfileFooterDelegate: AnyObject {
     func handleChooseStatus()
+    func presentGuestAlert()
 }
 
 class ProfileFooter: UIView {
@@ -16,13 +17,14 @@ class ProfileFooter: UIView {
     //MARK: - Properties
     
     weak var delegate: ProfileFooterDelegate?
+    private var guestBool: Bool!
     
-    private let chooseStatusButton: UIButton = {
+    private lazy var chooseStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Choose Status🔥", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = .mainBlueTint
+        button.backgroundColor = #colorLiteral(red: 0.3796107471, green: 0.2768687904, blue: 0.9376518726, alpha: 1)
         button.layer.cornerRadius = 25
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowRadius = 1
@@ -37,24 +39,43 @@ class ProfileFooter: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
+        guestOrNot()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Helpers
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guestOrNot()
+    }
     
-    private func configureUI() {
-        addSubview(chooseStatusButton)
-        chooseStatusButton.anchor(left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor,
-                                  right: rightAnchor, paddingLeft: 16, paddingRight: 16)
-        chooseStatusButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+    //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
     }
     
     //MARK: - Actions
     
     @objc func handleChooseStatus() {
-        delegate?.handleChooseStatus()
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.handleChooseStatus()
+        }
+    }
+    
+    //MARK: - Helpers
+    
+    private func configureUI() {
+        backgroundColor = .backgroundColor
+        addSubview(chooseStatusButton)
+        chooseStatusButton.anchor(left: leftAnchor, bottom: bottomAnchor,
+                                  right: rightAnchor, paddingLeft: 16, paddingRight: 16, height: 60)
+//        chooseStatusButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
 }

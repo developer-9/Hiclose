@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-protocol MessageCellDelegate: class {
+protocol MessageCellDelegate: AnyObject {
     func fetchCellMessages()
 }
 
@@ -76,6 +76,15 @@ class MessageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        imageView.isHidden = false
+        textView.text = ""
+        bubbleContainer.isHidden = false
+        imageBubbleContainer.isHidden = false
+    }
+    
     //MARK: - Helpers
     
     private func configureUI() {
@@ -111,11 +120,37 @@ class MessageCell: UICollectionViewCell {
         bubbleContainer.backgroundColor = viewModel.messageBackgroundColor
         textView.textColor = viewModel.messageTextColor
         
-        if !message.text.isEmpty {            
+        //MARK: - Fix Me -
+        if !message.text.isEmpty {
             textView.text = message.text
             
             bubbleLeftAnchor.isActive = viewModel.leftAnchorActive
             bubbleRightAnchor.isActive = viewModel.rightAnchorActive
+        } else {
+            bubbleContainer.isHidden = true
+            
+            addSubview(imageBubbleContainer)
+            imageBubbleContainer.layer.cornerRadius = 20
+            imageBubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor)
+            imageBubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 120).isActive = true
+            
+            imageBubbleLeftAnchor = imageBubbleContainer.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 12)
+            imageBubbleLeftAnchor.isActive = false
+            
+            imageBubbleRightAnchor = imageBubbleContainer.rightAnchor.constraint(equalTo: rightAnchor,
+                                                                                 constant: -12)
+            imageBubbleRightAnchor.isActive = false
+            
+            imageBubbleContainer.backgroundColor = .clear
+            imageBubbleContainer.addSubview(imageView)
+            imageView.centerY(inView: imageBubbleContainer)
+            imageView.anchor(top: imageBubbleContainer.topAnchor)
+            imageView.setDimensions(height: 160, width: 160)
+            imageView.layer.cornerRadius = 20
+            imageView.sd_setImage(with: viewModel.imageView, completed: nil)
+            
+            imageBubbleLeftAnchor.isActive = viewModel.leftAnchorActive
+            imageBubbleRightAnchor.isActive = viewModel.rightAnchorActive
         }
         
         if !message.imagesUrl.isEmpty {
@@ -137,12 +172,17 @@ class MessageCell: UICollectionViewCell {
             imageBubbleContainer.addSubview(imageView)
             imageView.centerY(inView: imageBubbleContainer)
             imageView.anchor(top: imageBubbleContainer.topAnchor)
-            imageView.setDimensions(height: 120, width: 120)
+            imageView.setDimensions(height: 160, width: 160)
             imageView.layer.cornerRadius = 20
             imageView.sd_setImage(with: viewModel.imageView, completed: nil)
             
             imageBubbleLeftAnchor.isActive = viewModel.leftAnchorActive
             imageBubbleRightAnchor.isActive = viewModel.rightAnchorActive
+        } else {
+            textView.text = message.text
+            
+            bubbleLeftAnchor.isActive = viewModel.leftAnchorActive
+            bubbleRightAnchor.isActive = viewModel.rightAnchorActive
         }
         
         profileImageView.isHidden = viewModel.shouldHideProfileImage

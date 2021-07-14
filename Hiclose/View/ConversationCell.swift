@@ -39,7 +39,7 @@ class ConversationCell: UICollectionViewCell {
         return view
     }()
     
-    var statusLabel: UILabel = {
+    private var statusLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
         label.text = "🎉"

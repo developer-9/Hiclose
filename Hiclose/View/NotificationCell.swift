@@ -7,17 +7,19 @@
 
 import UIKit
 
-protocol NotificationCellDelegate: class {
+protocol NotificationCellDelegate: AnyObject {
     func cell(_ cell: NotificationCell, wantsToAccept uid: String, id: String)
     func cell(_ cell: NotificationCell, wantsToDismiss uid: String, id: String)
     func cell(_ cell: NotificationCell, wantsToViewProfile uid: String)
     func cell(_ cell: NotificationCell, wantsToStartChatWith user: User)
+    func presentGuestAlert()
 }
 
 class NotificationCell: UITableViewCell {
     
     //MARK: - Properties
     
+    private var guestBool: Bool!
     weak var delegate: NotificationCellDelegate?
     
     var viewModel: NotificationViewModel? {
@@ -90,33 +92,60 @@ class NotificationCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
+        guestOrNot()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
+    }
+    
     //MARK: - Actions
     
     @objc func handleProfileImage() {
         guard let viewModel = viewModel else { return }
-        delegate?.cell(self, wantsToViewProfile: viewModel.notification.uid)
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.cell(self, wantsToViewProfile: viewModel.notification.uid)
+        }
     }
     
     @objc func handleAccept() {
         guard let viewModel = viewModel else { return }
-        delegate?.cell(self, wantsToAccept: viewModel.notification.uid, id: viewModel.notification.id)
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.cell(self, wantsToAccept: viewModel.notification.uid,
+                           id: viewModel.notification.id)
+        }
     }
     
     @objc func handleDismiss() {
         guard let viewModel = viewModel else { return }
-        delegate?.cell(self, wantsToDismiss: viewModel.notification.uid, id: viewModel.notification.id)
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.cell(self, wantsToDismiss: viewModel.notification.uid,
+                           id: viewModel.notification.id)
+        }
     }
     
     @objc func handleNewMessage() {
         guard let uid = viewModel?.notification.uid else { return }
-        UserService.fetchUser(withUid: uid) { user in
-            self.delegate?.cell(self, wantsToStartChatWith: user)
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            UserService.fetchUser(withUid: uid) { user in
+                self.delegate?.cell(self, wantsToStartChatWith: user)
+            }
         }
     }
     

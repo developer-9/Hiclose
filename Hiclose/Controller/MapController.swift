@@ -65,7 +65,6 @@ class MapController: UIViewController {
     private func fetchFriendsLocation() {
         guard let location = locationManager.location else { return }
         LocationService.fetchFriendsLocation(location: location) { friend in
-            print("DEBUG: FRIEND NAME IS \(friend.fullname), COORDINATE IS \(friend.location?.coordinate)")
             guard let coordinate = friend.location?.coordinate else { return }
             let annotation = FriendAnnotation(uid: friend.uid, coordinate: coordinate,
                                               profileImageUrl: friend.profileImageUrl)
@@ -74,7 +73,6 @@ class MapController: UIViewController {
                 return self.mapView.annotations.contains { annotation -> Bool in
                     guard let friendAnno = annotation as? FriendAnnotation else { return false }
                     if friendAnno.uid == friend.uid {
-                        print("DEBUG: HANDLE UPDATE FRIEND POSITION")
                         friendAnno.updateAnnotationPosition(withCoordinate: coordinate)
                         return true
                     }
@@ -83,7 +81,6 @@ class MapController: UIViewController {
             }
             
             if !friendIsVisible {
-                print("DEBUG: ANNOTATION IS \(annotation.uid)")
                 guard let currentUid = Auth.auth().currentUser?.uid else { return }
                 if annotation.uid != currentUid {
                     self.mapView.addAnnotation(annotation)
@@ -101,7 +98,6 @@ class MapController: UIViewController {
     
     @objc func zoomToFit() {
         self.mapView.zoomToFit(annotations: self.mapView.annotations)
-        print("DEBUG: COMPLETE ZOOM TO ANNOTATION \(mapView.annotations)")
     }
     
     @objc func handleDismiss() {
@@ -176,16 +172,13 @@ extension MapController: CLLocationManagerDelegate {
         locationManager.delegate = self
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
-            print("DEBUG: Not determined..")
             locationManager.requestWhenInUseAuthorization()
         case .restricted, .denied:
             break
         case .authorizedAlways:
-            print("DEBUG: Auth always..")
             locationManager.startUpdatingLocation()
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
         case .authorizedWhenInUse:
-            print("DEBUG: Auth when in use..")
             locationManager.requestAlwaysAuthorization()
         @unknown default:
             break

@@ -27,11 +27,15 @@ struct LoginViewModel: AuthenticationViewModel {
     }
     
     var buttonBackgroundColor: UIColor {
-        return formIsValid ? #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1) : #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        return formIsValid ? .clear : #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
     }
     
     var buttonTitleColor: UIColor {
         return formIsValid ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+    }
+    var buttonBorderColor: UIColor {
+        return formIsValid ? UIColor.gradientColor(size: CGSize(width: 120, height: 50),
+                                                   colors: [.cyan, .magenta]) : .clear
     }
 }
 
@@ -48,10 +52,15 @@ struct RegistrationViewModel: AuthenticationViewModel {
     }
 
     var buttonBackgroundColor: UIColor {
-        return formIsValid ? #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1) : #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        return formIsValid ? .clear : #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
     }
     
     var buttonTitleColor: UIColor {
         return formIsValid ? #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+    }
+    
+    var buttonBorderColor: UIColor {
+        return formIsValid ? UIColor.gradientColor(size: CGSize(width: 120, height: 50),
+                                                   colors: [.cyan, .magenta]) : .clear
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import SDWebImage
 
-protocol ConversationHeaderDelegate: class {
+protocol ConversationHeaderDelegate: AnyObject {
     func handleProfile()
 }
 
@@ -59,6 +59,11 @@ class ConversationHeader: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        fetchCurrentUser()
+    }
+    
     //MARK: - API
     
     private func fetchCurrentUser() {
@@ -92,9 +97,7 @@ class ConversationHeader: UICollectionReusableView {
     private func populateProfileImage() {
         guard let user = user else { return }
         guard let url = URL(string: user.profileImageUrl) else { return }
-        DispatchQueue.main.async {
-            self.profileImageView.sd_setImage(with: url, completed: nil)
-            self.profileImageView.setNeedsLayout()
-        }
+        self.profileImageView.sd_setImage(with: url, completed: nil)
+        self.profileImageView.setNeedsLayout()
     }
 }

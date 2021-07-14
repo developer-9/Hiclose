@@ -6,15 +6,14 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationController: UIViewController {
     
     //MARK: - Properties
     
     private var viewModel = RegistrationViewModel()
-    
     weak var delegate: AuthenticationDelegate?
-    
     private var profileImage: UIImage?
     
     private let plusPhotoButton: UIButton = {
@@ -61,14 +60,11 @@ class RegistrationController: UIViewController {
     private let signUpButton: UIButton = {
         let button = UIButton()
         button.setTitle("Sign Up", for: .normal)
-        button.layer.cornerRadius = 10.0
+        button.layer.cornerRadius = 50 / 2
+        button.layer.borderWidth = 2.5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         button.setTitleColor(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), for: .normal)
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowRadius = 1
-        button.layer.shadowOffset = CGSize(width: 2, height: 2)
-        button.layer.shadowOpacity = 0.5
         button.setHeight(50)
         button.isEnabled = false
         button.addTarget(self, action: #selector(handleRegistration), for: .touchUpInside)
@@ -77,9 +73,12 @@ class RegistrationController: UIViewController {
     
     private let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
-        let attributedTitle = NSMutableAttributedString(string: "すでにアカウントを持っています ", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.white])
+        let attributedTitle = NSMutableAttributedString(string: "すでにアカウントを持っています ",
+                                                        attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.white])
         
-        attributedTitle.append(NSAttributedString(string: "Log In", attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.white]))
+        attributedTitle.append(NSAttributedString(string: "Log In",
+                                                  attributes: [.font: UIFont.boldSystemFont(ofSize: 16),
+                                                               .foregroundColor: UIColor.white]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleShowLogin), for: .touchUpInside)
@@ -107,18 +106,12 @@ class RegistrationController: UIViewController {
         guard let username = usernameTextField.text?.lowercased() else { return }
         guard let profileImage = self.profileImage else { return }
         
-        let credentials = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImage: profileImage)
+        let credentials = AuthCredentials(email: email, password: password, fullname: fullname,
+                                          username: username, profileImage: profileImage)
         
         showLoader(true)
         
-        AuthService.registerUser(withCredential: credentials) { error in
-            if let error = error {
-                print("DEBUG: FAILED TO REGISTER USER \(error.localizedDescription)")
-                self.showLoader(false)
-                self.showError(error.localizedDescription)
-                return
-            }
-            
+        registerUser(withCredential: credentials) { _ in
             self.showLoader(false)
             self.delegate?.authenticationComplete()
         }
@@ -145,7 +138,6 @@ class RegistrationController: UIViewController {
         } else {
             viewModel.username = sender.text
         }
-        
         updateForm()
     }
     
@@ -174,15 +166,20 @@ class RegistrationController: UIViewController {
         plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32)
         plusPhotoButton.setDimensions(height: 200, width: 200)
         
-        let stack = UIStackView(arrangedSubviews: [emailContainerView, fullnameContainerView, usernameContainerView, passwordContainerView, signUpButton])
+        let stack = UIStackView(arrangedSubviews: [emailContainerView, fullnameContainerView,
+                                                   usernameContainerView, passwordContainerView,
+                                                   signUpButton])
         stack.axis = .vertical
         stack.spacing = 16
         
         view.addSubview(stack)
-        stack.anchor(top: plusPhotoButton.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 32, paddingLeft: 32, paddingRight: 32)
+        stack.anchor(top: plusPhotoButton.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
+                     paddingTop: 32, paddingLeft: 32, paddingRight: 32)
         
         view.addSubview(alreadyHaveAccountButton)
-        alreadyHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 32, paddingRight: 32)
+        alreadyHaveAccountButton.anchor(left: view.leftAnchor,
+                                        bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                                        right: view.rightAnchor, paddingLeft: 32, paddingRight: 32)
     }
     
     private func configureNotificationObservers() {
@@ -198,6 +195,33 @@ class RegistrationController: UIViewController {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
+    
+    private func registerUser(withCredential credentials: AuthCredentials,
+                              completion: ((Error?) -> Void)?) {
+        ImageUploader.uploadImage(image: credentials.profileImage) { imageUrl in
+            Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { (result, error) in
+                if let error = error {
+                    print("DEBUG: FAILED TO REGISTRATION WITH \(error.localizedDescription)")
+                    self.showLoader(false)
+                    self.showError(error.localizedDescription)
+                    return
+                }
+                
+                guard let uid = result?.user.uid else { return }
+                let data: [String: Any] = ["email": credentials.email,
+                                           "fullname": credentials.fullname,
+                                           "profileImageUrl": imageUrl,
+                                           "uid": uid,
+                                           "username": credentials.username]
+                
+                COLLECTION_USERS.document(uid).setData(data) { _ in
+                    let statusData: [String: Any] = ["status": "🎉",
+                                                     "uid": uid]
+                    COLLECTION_STATUS.document(uid).setData(statusData, completion: completion)
+                }
+            }
+        }
+    }
 }
 
 //MARK: - FormViewModel
@@ -205,6 +229,7 @@ class RegistrationController: UIViewController {
 extension RegistrationController: FormViewModel {
     func updateForm() {
         signUpButton.backgroundColor = viewModel.buttonBackgroundColor
+        signUpButton.layer.borderColor = viewModel.buttonBorderColor.cgColor
         signUpButton.setTitleColor(viewModel.buttonTitleColor, for: .normal)
         signUpButton.isEnabled = viewModel.formIsValid
     }

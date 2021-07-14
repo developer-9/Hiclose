@@ -7,9 +7,10 @@
 
 import UIKit
 
-protocol ChatHeaderDelegate: class {
+protocol ChatHeaderDelegate: AnyObject {
     func header(_ chatHeader: ChatHeader)
     func header(_ chatHeader: ChatHeader, showProfileWith user: User)
+    func presentGuestAlert()
 }
 
 class ChatHeader: UICollectionReusableView {

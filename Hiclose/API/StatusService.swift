@@ -21,10 +21,9 @@ struct StatusService {
     }
     
     static func setStatus(withStatus status: String, completion: ((Error?) -> Void)?) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let statusData = ["status": status,
-                          "uid": uid] as [String: Any]
-        COLLECTION_STATUS.document(uid).setData(statusData,completion: completion)
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        let status: [String: Any] = ["status": status]
+        COLLECTION_STATUS.document(currentUid).updateData(status, completion: completion)
     }
     
     static func fetchStatus(withUid uid: String, completion: @escaping(Status) -> Void) {

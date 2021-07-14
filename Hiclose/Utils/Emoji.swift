@@ -218,6 +218,59 @@ enum Emoji: Int, CaseIterable {
     case a216
     case a217
     case a218
+    case a219
+    case a220
+    case a221
+    case a222
+    case a223
+    case a224
+    case a225
+    case a226
+    case a227
+    case a228
+    case a229
+    case a230
+    case a231
+    case a232
+    case a233
+    case a234
+    case a235
+    case a236
+    case a237
+    case a238
+    case a239
+    case a240
+    case a241
+    case a242
+    case a243
+    case a244
+    case a245
+    case a246
+    case a247
+    case a248
+    case a249
+    case a250
+    case a251
+    case a252
+    case a253
+    case a254
+    case a255
+    case a256
+    case a257
+    case a258
+    case a259
+    case a260
+    case a261
+    case a262
+    case a263
+    case a264
+    case a265
+    case a266
+    case a267
+    case a268
+    case a269
+    case a270
+    case a271
     
     var description: String {
         switch self {
@@ -433,6 +486,59 @@ enum Emoji: Int, CaseIterable {
         case .a216: return "💂🏻‍♂️"
         case .a217: return "🕵🏻‍♀️"
         case .a218: return "🕵🏻"
+        case .a219: return "🦄"
+        case .a220: return "🐶"
+        case .a221: return "🦋"
+        case .a222: return "🦖"
+        case .a223: return "🦕"
+        case .a224: return "🌿"
+        case .a225: return "💐"
+        case .a226: return "🔥"
+        case .a227: return "🤍"
+        case .a228: return "❤️‍🔥"
+        case .a229: return "❤️‍🩹"
+        case .a230: return "💝"
+        case .a231: return "🍜"
+        case .a232: return "🥑"
+        case .a233: return "🐩"
+        case .a234: return "🦦"
+        case .a235: return "☔️"
+        case .a236: return "☂️"
+        case .a237: return "⛅️"
+        case .a238: return "🌧"
+        case .a239: return "🍣"
+        case .a240: return "🌈"
+        case .a241: return "🌚"
+        case .a242: return "☄️"
+        case .a243: return "🌏"
+        case .a244: return "💫"
+        case .a245: return "🍄"
+        case .a246: return "🌹"
+        case .a247: return "🫐"
+        case .a248: return "🎧"
+        case .a249: return "🏝"
+        case .a250: return "🎲"
+        case .a251: return "🎳"
+        case .a252: return "🎯"
+        case .a253: return "🎰"
+        case .a254: return "🎮"
+        case .a255: return "🎤"
+        case .a256: return "🎬"
+        case .a257: return "🚗"
+        case .a258: return "🚄"
+        case .a259: return "🛩"
+        case .a260: return "🎡"
+        case .a261: return "⛩"
+        case .a262: return "🏡"
+        case .a263: return "🏘"
+        case .a264: return "🏢"
+        case .a265: return "📸"
+        case .a266: return "💸"
+        case .a267: return "💈"
+        case .a268: return "🚬"
+        case .a269: return "📝"
+        case .a270: return "🍻"
+        case .a271: return "🎉"
         }
     }
 }

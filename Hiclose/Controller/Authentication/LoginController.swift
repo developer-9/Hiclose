@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol AuthenticationDelegate: class {
+protocol AuthenticationDelegate: AnyObject {
     func authenticationComplete()
 }
 
@@ -16,7 +16,6 @@ class LoginController: UIViewController {
     //MARK: - Properties
     
     weak var delegate: AuthenticationDelegate?
-    
     private var viewModel = LoginViewModel()
     
     private let titleLabel: UILabel = {
@@ -25,6 +24,7 @@ class LoginController: UIViewController {
         label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 42, weight: .semibold)
+        label.alpha = 0
         return label
     }()
     
@@ -34,6 +34,7 @@ class LoginController: UIViewController {
         label.textColor = .white
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.alpha = 0
         return label
     }()
     
@@ -60,17 +61,30 @@ class LoginController: UIViewController {
     private let loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Log In", for: .normal)
-        button.layer.cornerRadius = 10
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         button.setTitleColor(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1), for: .normal)
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowRadius = 1
-        button.layer.shadowOffset = CGSize(width: 2, height: 2)
-        button.layer.shadowOpacity = 0.5
+        button.layer.cornerRadius = 50 / 2
+        button.layer.borderWidth = 2.5
         button.setHeight(50)
         button.isEnabled = false
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        return button
+    }()
+    
+    private let guestLoginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Let's try Guest Login😶‍🌫️", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.backgroundColor = .clear
+        button.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        button.layer.cornerRadius = 50 / 2
+        button.layer.borderColor = UIColor.gradientColor(size: CGSize(width: 120, height: 50),
+                                                         colors: [.cyan, .magenta]).cgColor
+        button.layer.borderWidth = 2
+        button.setHeight(50)
+        button.addTarget(self, action: #selector(handleGuestLogin), for: .touchUpInside)
+        button.alpha = 0
         return button
     }()
     
@@ -94,6 +108,12 @@ class LoginController: UIViewController {
     
     //MARK: - Actions
     
+    @objc func handleGuestLogin() {
+        let controller = GuestLoginController()
+        controller.delegate = delegate
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     @objc func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
@@ -107,7 +127,6 @@ class LoginController: UIViewController {
                 self.showError(error.localizedDescription)
                 return
             }
-            
             self.showLoader(false)
             self.delegate?.authenticationComplete()
         }
@@ -129,7 +148,6 @@ class LoginController: UIViewController {
         } else {
             viewModel.password = sender.text
         }
-        
         updateForm()
     }
     
@@ -151,23 +169,32 @@ class LoginController: UIViewController {
         titleStack.centerX(inView: view)
         titleStack.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32)
         
-        titleLabel.alpha = 0
-        subTitleLabel.alpha = 0
-        
         UIView.animate(withDuration: 4.2) {
-            self.titleLabel.alpha = 1
             self.subTitleLabel.alpha = 1
         }
         
+        UIView.animate(withDuration: 8.2) {
+            self.titleLabel.alpha = 1
+        }
+        
         let inputStack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView,
-                                                   loginButton])
+                                                        loginButton])
         inputStack.axis = .vertical
         inputStack.spacing = 16
         
         view.addSubview(inputStack)
-        
         inputStack.anchor(top: titleLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                     paddingTop: 32, paddingLeft: 32, paddingRight: 32)
+                          paddingTop: 32, paddingLeft: 32, paddingRight: 32)
+        
+        view.addSubview(guestLoginButton)
+        guestLoginButton.centerX(inView: view)
+        guestLoginButton.anchor(top: inputStack.bottomAnchor, left: view.leftAnchor,
+                                right: view.rightAnchor, paddingTop: 72, paddingLeft: 52,
+                                paddingRight: 52)
+        
+        UIView.animate(withDuration: 8.2) {
+            self.guestLoginButton.alpha = 1
+        }
         
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(left: view.leftAnchor,
@@ -186,6 +213,7 @@ class LoginController: UIViewController {
 extension LoginController: FormViewModel {
     func updateForm() {
         loginButton.backgroundColor = viewModel.buttonBackgroundColor
+        loginButton.layer.borderColor = viewModel.buttonBorderColor.cgColor
         loginButton.setTitleColor(viewModel.buttonTitleColor, for: .normal)
         loginButton.isEnabled = viewModel.formIsValid
     }

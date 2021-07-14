@@ -7,11 +7,13 @@
 
 import UIKit
 
-protocol ProfileHeaderDelegate: class {
+protocol ProfileHeaderDelegate: AnyObject {
     func dismissController()
     func showSettingsController()
     func presentEditProfileController()
     func linkShare()
+    func tapStatus()
+    func presentGuestAlert()
 }
 
 class ProfileHeader: UIView {
@@ -24,9 +26,8 @@ class ProfileHeader: UIView {
             fetchStatus()
         }
     }
-    
+    private var guestBool: Bool!
     weak var delegate: ProfileHeaderDelegate?
-    
     private let gradient = CAGradientLayer()
     
     private let dismissButton: UIButton = {
@@ -60,6 +61,9 @@ class ProfileHeader: UIView {
         view.layer.shadowRadius = 1
         view.layer.shadowOffset = CGSize(width: 1, height: 1)
         view.layer.shadowOpacity = 0.5
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedStatus))
+        view.addGestureRecognizer(tap)
         
         view.addSubview(statusLabel)
         statusLabel.centerY(inView: view)
@@ -113,11 +117,14 @@ class ProfileHeader: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
+        guestOrNot()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         gradient.frame = bounds
+        guestOrNot()
+        fetchStatus()
     }
     
     required init?(coder: NSCoder) {
@@ -125,6 +132,12 @@ class ProfileHeader: UIView {
     }
     
     //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
+    }
     
     func fetchStatus() {
         guard let uid = self.user?.uid else { return }
@@ -134,6 +147,14 @@ class ProfileHeader: UIView {
     }
     
     //MARK: - Actions
+    
+    @objc func tappedStatus() {
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.tapStatus()
+        }
+    }
     
     @objc func handleLink() {
         delegate?.linkShare()
@@ -148,7 +169,11 @@ class ProfileHeader: UIView {
     }
     
     @objc func handleEditProfile() {
-        delegate?.presentEditProfileController()
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.presentEditProfileController()
+        }
     }
     
     //MARK: - Helpers

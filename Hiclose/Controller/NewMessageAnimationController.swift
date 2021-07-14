@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol NewMessageAnimationControllerDelegate: class {
+protocol NewMessageAnimationControllerDelegate: AnyObject {
     func controller(_ controller: NewMessageAnimationController, wantsToStartChatWith user: User)
 }
 
@@ -87,7 +87,6 @@ class NewMessageAnimationController: UIViewController {
     
     private func configureUI() {
         view.backgroundColor = .backgroundColor
-        navigationController?.navigationBar.barStyle = .black
         
         view.addSubview(circularProgressView)
         circularProgressView.setDimensions(height: 360, width: 360)
@@ -103,6 +102,6 @@ class NewMessageAnimationController: UIViewController {
         guard let user = user else { return }
         guard let url = URL(string: user.profileImageUrl) else { return }
         profileImageView.sd_setImage(with: url, completed: nil)
-        connectLabel.text = "\(user.fullname) とのチャットルームをつくっています🧸"
+        connectLabel.text = "We are creating a chat room with \(user.fullname)."
     }
 }

@@ -29,10 +29,9 @@ struct LocationService {
     static func setToFriendsWithMyLocation(completion: @escaping(Error) -> Void) {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         setLocation(uid: currentUid) { _ in
-            FriendService.fetchFriends { friends in
+            FriendService.fetchMyFriends { friends in
                 for friend in friends {
                     setLocation(uid: friend.uid) { _ in
-                        print("DEBUG: COMPLETE SETLOCATION")
                     }
                 }
             }

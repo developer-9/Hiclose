@@ -46,7 +46,7 @@ class SearchFriendsController: UIViewController {
     private var ifNoFriendLabel: UILabel = {
         let label = UILabel()
         label.isHidden = true
-        label.text = "You have no friend🤥"
+        label.text = "Find your friends🤥"
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -91,7 +91,7 @@ class SearchFriendsController: UIViewController {
     //MARK: - API
     
     private func fetchFriends() {
-        FriendService.fetchFriends { friends in
+        FriendService.fetchMyFriends { friends in
             self.friends = friends
             self.collectionView.reloadData()
         }
@@ -205,7 +205,7 @@ extension SearchFriendsController: UISearchBarDelegate {
         searchBar.showsCancelButton = true
         collectionView.isHidden = true
         tableView.isHidden = false
-        descriptionLabel.text = "Let's search your new friend🔥"
+        descriptionLabel.text = "Let's search your new friends🔥"
         navigationItem.title = "Explore🤫"
     }
     

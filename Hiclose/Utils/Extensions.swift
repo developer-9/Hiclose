@@ -46,6 +46,18 @@ extension UIColor {
     static let outlineStrokeColor = UIColor.rgb(red: 234, green: 46, blue: 111)
     static let trackStrokeColor = UIColor.rgb(red: 56, green: 25, blue: 49)
     static let pulsatingFillColor = UIColor.rgb(red: 86, green: 30, blue: 63)
+    
+    static func gradientColor(size: CGSize, colors: [UIColor]) -> UIColor {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(origin: .zero, size: size)
+        gradientLayer.colors = colors.map({ $0.cgColor })
+        UIGraphicsBeginImageContext(size)
+        gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
+        let backgroundColorImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return UIColor(patternImage: backgroundColorImage!)
+    }
 }
 
 //MARK: - UIViewController
@@ -80,7 +92,6 @@ extension UIViewController {
     
     func showLoader(_ show: Bool) {
         view.endEditing(true)
-
         if show {
             UIViewController.hud.show(in: view)
         } else {
@@ -91,7 +102,20 @@ extension UIViewController {
     func tbd() {
         let alert = UIAlertController(title: "Oops!!", message: "Currently under development🔥", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "I'm Looking forward to it!", style: .default, handler: nil))
-        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func guestAlert() {
+        let alert = UIAlertController(title: "✋🏽Oops✋🏽",
+                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!!",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Sing In", style: .default, handler: { _ in
+            let controller = IntroController()
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     

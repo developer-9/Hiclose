@@ -10,7 +10,7 @@ import PanModal
 
 private let reuseIdentifier = "EmojiCell"
 
-protocol ChooseStatusControllerDelegate: class {
+protocol ChooseStatusControllerDelegate: AnyObject {
     func didSelect(option: Emoji)
 }
 

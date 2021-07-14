@@ -10,7 +10,7 @@ import Firebase
 
 private let reuseIdentifier = "ProfileCell"
 
-protocol ProfileControllerDelegate: class {
+protocol ProfileControllerDelegate: AnyObject {
     func handleLogout()
 }
 
@@ -19,19 +19,29 @@ class ProfileController: UITableViewController {
     //MARK: - Properties
     
     weak var delegate: ProfileControllerDelegate?
+    
     private var user: User? {
         didSet { headerView.user = user }
     }
+//
+//    private var guestBool: Bool! {
+//        didSet {
+//            headerView.guestBool = guestBool
+//            footerView.guestBool = guestBool
+//        }
+//    }
     private lazy var headerView = ProfileHeader(frame: .init(x: 0, y: 0,
                                                         width: view.frame.width, height: 420))
-    private let footerView = ProfileFooter()
+    private lazy var footerView = ProfileFooter(frame: .init(x: 0, y: 0,
+                                                        width: view.frame.width, height: 128))
     
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        fetchUser()
+        fetchCurrentUser()
+//        guestOrNot()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,28 +49,39 @@ class ProfileController: UITableViewController {
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.barStyle = .black
     }
-        
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        fetchCurrentUser()
+//        guestOrNot()
+    }
+    
     //MARK: - API
     
-    private func fetchUser() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        UserService.fetchUser(withUid: uid) { user in
+    private func fetchCurrentUser() {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        UserService.fetchUser(withUid: currentUid) { user in
             self.user = user
         }
     }
+    
+//    private func guestOrNot() {
+//        UserService.guestOrNot { bool in
+//            self.guestBool = bool
+//        }
+//    }
     
     //MARK: - Helpers
     
     private func configureUI() {
         tableView.backgroundColor = .backgroundColor
-        tableView.isScrollEnabled = false
+        tableView.isScrollEnabled = true
         tableView.tableHeaderView = headerView
         headerView.delegate = self
         tableView.register(ProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.rowHeight = 64
         
-        footerView.frame = .init(x: 0, y: 0, width: view.frame.width, height: 100)
         tableView.tableFooterView = footerView
         footerView.delegate = self
     }
@@ -115,7 +136,13 @@ extension ProfileController {
 
 //MARK: - ProfileHeaderDelegate
 
-extension ProfileController: ProfileHeaderDelegate {
+extension ProfileController: ProfileHeaderDelegate {    
+    func tapStatus() {
+        let controller = ChooseStatusController(collectionViewLayout: UICollectionViewFlowLayout())
+        controller.delegate = self
+        presentPanModal(controller)
+    }
+    
     func showSettingsController() {
         let controller = SettingsController()
         let nav = UINavigationController(rootViewController: controller)
@@ -152,6 +179,20 @@ extension ProfileController: ProfileHeaderDelegate {
 //MARK: - ProfileFooterDelegate
 
 extension ProfileController: ProfileFooterDelegate {
+    func presentGuestAlert() {
+        let alert = UIAlertController(title: "✋🏽Oops✋🏽",
+                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!!",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Sing In", style: .default, handler: { _ in
+            let controller = IntroController()
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     func handleChooseStatus() {
         let controller = ChooseStatusController(collectionViewLayout: UICollectionViewFlowLayout())
         controller.delegate = self
@@ -165,7 +206,7 @@ extension ProfileController: EditProfileControllerDelegate {
     func updateUserInfoComplete() {
         dismiss(animated: true, completion: nil)
         configureUI()
-        fetchUser()
+        fetchCurrentUser()
     }
 }
 

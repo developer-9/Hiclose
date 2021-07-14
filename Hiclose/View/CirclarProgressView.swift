@@ -43,7 +43,6 @@ class CirclarProgressView: UIView {
     
     private func circleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        
         let center = CGPoint(x: 0, y: 32)
         let circularPath = UIBezierPath(arcCenter: center, radius: self.frame.width / 2.5,
                                         startAngle: -(.pi / 2), endAngle: 1.5 * .pi, clockwise: true)
@@ -59,7 +58,6 @@ class CirclarProgressView: UIView {
     
     func animatePulsatingLayer() {
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        
         animation.toValue = 1.25
         animation.duration = 0.8
         animation.timingFunction = CAMediaTimingFunction(name: .easeOut)

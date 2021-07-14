@@ -19,18 +19,20 @@ class ChatController: UICollectionViewController {
     
     private let user: User
     private var messages = [Message]()
-    var fromCurrentuser = false
     private var selectedImages: [UIImage]?
+    private var headerView = ChatHeader()
     
+    private var guestBool: Bool! {
+        didSet { customInputView.guestBool = guestBool }
+    }
+        
     private var layout: UICollectionViewLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionHeadersPinToVisibleBounds = true
         return layout
     }()
-    
-    private var headerView = ChatHeader()
-    
+        
     private lazy var customInputView: CustomInputAccessoryView = {
         let iv = CustomInputAccessoryView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 40))
         iv.delegate = self
@@ -53,6 +55,7 @@ class ChatController: UICollectionViewController {
         configureUI()
         fetchMessages()
         configureNotificationObservers()
+        guestOrNot()
     }
     
     override var inputAccessoryView: UIView? {
@@ -64,6 +67,12 @@ class ChatController: UICollectionViewController {
     }
     
     //MARK: - API
+    
+    private func guestOrNot() {
+        UserService.guestOrNot { bool in
+            self.guestBool = bool
+        }
+    }
     
     private func fetchMessages() {
         MessageService.fetchMessages(forUser: user) { (messages) in
@@ -105,6 +114,7 @@ class ChatController: UICollectionViewController {
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ChatHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         collectionView.alwaysBounceVertical = true
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.keyboardDismissMode = .interactive
         collectionView.contentInsetAdjustmentBehavior = .never
     }
@@ -173,7 +183,6 @@ extension ChatController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 40)
-        
         let estimatedSizeCell = MessageCell(frame: frame)
         estimatedSizeCell.message = messages[indexPath.row]
         estimatedSizeCell.layoutIfNeeded()
@@ -192,6 +201,20 @@ extension ChatController: UICollectionViewDelegateFlowLayout {
 //MARK: - CustomInputAccessoryViewDelegate
 
 extension ChatController: CustomInputAccessoryViewDelegate {
+    func presentGuestAlert() {
+        let alert = UIAlertController(title: "✋🏽Oops✋🏽",
+                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!!",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Sing In", style: .default, handler: { _ in
+            let controller = IntroController()
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     func presentImagePickerController() {
         let imagePickerController = ImagePickerController()
         imagePickerController.delegate = self
@@ -200,7 +223,6 @@ extension ChatController: CustomInputAccessoryViewDelegate {
     }
     
     func inputView(_ inputView: CustomInputAccessoryView, wantsToSend message: String) {
-        
         MessageService.uploadMessage(message, to: user) { error in
             if let error = error {
                 print("DEBUG: FAILED TO UPLOAD MESSAGE WITH ERROR \(error.localizedDescription)")
@@ -218,17 +240,14 @@ extension ChatController: ImagePickerDelegate {
     }
     
     func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
-        guard let selectedImages = images as? [UIImage] else { return }
-        self.selectedImages = selectedImages
+        self.selectedImages = images
         
-        ImageUploader.uploadImages(images: selectedImages) { imagesUrl in
+        ImageUploader.uploadImages(images: images) { imagesUrl in
             MessageService.uploadMessage(imagesUrl: imagesUrl, to: self.user) { error in
                 if let error = error {
                     print("DEBUG: FAILED TO UPLOAD IMAGES WITH ERROR \(error.localizedDescription)")
                     return
                 }
-                
-                print("DEBUG: SECCESS UPLOAD IMAGES!")
                 self.dismiss(animated: true, completion: nil)
             }
         }

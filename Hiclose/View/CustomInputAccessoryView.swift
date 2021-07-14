@@ -8,17 +8,18 @@
 import UIKit
 import AVFoundation
 
-protocol CustomInputAccessoryViewDelegate: class {
+protocol CustomInputAccessoryViewDelegate: AnyObject {
     func inputView(_ inputView: CustomInputAccessoryView, wantsToSend message: String)
     func presentImagePickerController()
+    func presentGuestAlert()
 }
 
 class CustomInputAccessoryView: UIView {
     
     //MARK: - Properties
     
+    var guestBool: Bool!
     private var audioPlayer: AVAudioPlayer!
-        
     weak var delegate: CustomInputAccessoryViewDelegate?
     
     private lazy var messageInputTextView: UITextView = {
@@ -76,14 +77,22 @@ class CustomInputAccessoryView: UIView {
     //MARK: - Actions
     
     @objc func handleSelectPhoto() {
-        delegate?.presentImagePickerController()
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.presentImagePickerController()
+        }
     }
     
     @objc func handleSendMessage() {
         guard let message = messageInputTextView.text else { return }
-        delegate?.inputView(self, wantsToSend: message)
-        clearMessageText()
-        playSound(name: "send")
+        if self.guestBool {
+            delegate?.presentGuestAlert()
+        } else {
+            delegate?.inputView(self, wantsToSend: message)
+            clearMessageText()
+            playSound(name: "send")
+        }
     }
     
     @objc func handleTextInputChange() {

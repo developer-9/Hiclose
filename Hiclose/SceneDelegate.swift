@@ -16,8 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        let nav = UINavigationController(rootViewController: ConversationsController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let controller = ConversationsController(collectionViewLayout: UICollectionViewFlowLayout())
+//        let nav = UINavigationController(rootViewController: ConversationsController(collectionViewLayout: UICollectionViewFlowLayout()))
 //        let nav = UINavigationController(rootViewController: IntroController())
+//        let nav = UINavigationController(rootViewController: LoginController())
+        let nav = UINavigationController(rootViewController: controller)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
     }

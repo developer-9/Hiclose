@@ -11,7 +11,7 @@ import PanModal
 private let reuseIdentifier = "UserCell"
 private let headerIdentifier = "HeaderView"
 
-protocol NewMessageControllerDelegate: class {
+protocol NewMessageControllerDelegate: AnyObject {
     func controller(wantsToStartChatFromNewMessageController user: User)
 }
 
@@ -29,7 +29,7 @@ class NewMessageController: UICollectionViewController {
     private var ifNoFriendLabel: UILabel = {
         let label = UILabel()
         label.isHidden = true
-        label.text = "You have no friend😵‍💫"
+        label.text = "No friends yet😵‍💫"
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 16)
@@ -58,7 +58,7 @@ class NewMessageController: UICollectionViewController {
     //MARK: - API
     
     private func fetchFriends() {
-        FriendService.fetchFriends { friends in
+        FriendService.fetchMyFriends { friends in
             self.users = friends
         }
     }

@@ -28,7 +28,7 @@ struct MessageService {
     static func uploadMessage(_ message: String? = nil, imagesUrl: [String]? = nil, to user: User,
                               completion: @escaping(Error?) -> Void) {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        var data = [String : Any]()
+        var data = [String: Any]()
         
         if let message = message {
             data = ["text": message,
@@ -52,7 +52,7 @@ struct MessageService {
         }
     }
     
-    static func uploadMessageToHicloseAccount(completion: @escaping(Error?) -> Void) {
+    static func uploadMessageFromHicloseAccount(completion: @escaping(Error?) -> Void) {
         UserService.fetchUser(withUid: "zfpbiUaLKtTSaUs86q2WHxBjD8r1") { hicloseAccount in
             guard let currentUid = Auth.auth().currentUser?.uid else { return }
             let data: [String: Any] = ["text": "Welcome to Hiclose🔥",
@@ -78,9 +78,7 @@ struct MessageService {
         query.addSnapshotListener { (snapshot, error) in
             guard let snapshot = snapshot else { return }
             if snapshot.isEmpty {
-                print("DEBUG: CONVERSATIONS ARE EMPTY")
-                uploadMessageToHicloseAccount { _ in
-                    print("DEBUG: MISSION COMPLETE")
+                uploadMessageFromHicloseAccount { _ in
                 }
             }
             snapshot.documentChanges.forEach({ change in

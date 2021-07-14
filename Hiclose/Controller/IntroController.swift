@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol IntroControllerDelegate: class {
+protocol IntroControllerDelegate: AnyObject {
     func configure()
 }
 
@@ -16,10 +16,9 @@ class IntroController: UIViewController {
     //MARK: - Properties
     
     weak var delegate: IntroControllerDelegate?
-    
     private let scrollView = UIScrollView()
     private let pageControl = UIPageControl()
-    private let picArray: [String] = ["2", "3", "4", "5", "6", "7"]
+    private let picArray: [String] = ["0", "1", "2", "3", "4", "5"]
     
     private let presentLoginViewButton: UIButton = {
         let button = UIButton(type: .system)
@@ -46,7 +45,8 @@ class IntroController: UIViewController {
         configurePageControl()
         
         scrollView.addSubview(presentLoginViewButton)
-        presentLoginViewButton.frame = CGRect(x: view.frame.width * 5 + (view.frame.width / 4), y: view.frame.maxY - 200,
+        presentLoginViewButton.frame = CGRect(x: view.frame.width * 5 + (view.frame.width / 4),
+                                              y: view.frame.maxY - 160,
                                               width: view.frame.width / 2, height: 50)
     }
     
@@ -73,9 +73,11 @@ class IntroController: UIViewController {
     
     private func createImageView(name: String, int: Int) -> UIImageView {
         let iv = UIImageView(image: UIImage(named: name))
-        iv.frame = CGRect(x: view.frame.width * CGFloat(int), y: 0,
-                          width: view.frame.width, height: view.frame.height)
+        let screenBounds: CGRect = UIScreen.main.bounds
+        iv.frame = CGRect(x: screenBounds.width * CGFloat(int), y: 0,
+                          width: screenBounds.width, height: screenBounds.height)
         iv.contentMode = .scaleAspectFit
+        iv.clipsToBounds = true
         return iv
     }
     
@@ -92,6 +94,7 @@ class IntroController: UIViewController {
         scrollView.contentSize = CGSize(width: view.frame.width * CGFloat(picArray.count),
                                         height: view.frame.height)
         scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.delegate = self
     }
@@ -114,7 +117,6 @@ extension IntroController: UIScrollViewDelegate {
         if fmod(scrollView.contentOffset.x, scrollView.frame.maxX) == 0 {
             pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.frame.maxX)
         }
-        
     }
 }
 

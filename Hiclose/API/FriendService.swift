@@ -23,8 +23,12 @@ struct FriendService {
     
     static func friendAccept(withUid uid: String, completion: @escaping(Error?) -> Void) {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        COLLECTION_LIST.document(currentUid).collection("friend-list").document(uid).setData([:]) { _ in
-            COLLECTION_LIST.document(uid).collection("friend-list").document(currentUid).setData([:], completion: completion)
+        
+        UserService.fetchUser(withUid: uid) { friend in
+            let data: [String: Any] = ["boredNow": false]
+            COLLECTION_LIST.document(currentUid).collection("friend-list").document(uid).setData(data) { _ in
+                COLLECTION_LIST.document(uid).collection("friend-list").document(currentUid).setData(data, completion: completion)
+            }
         }
     }
         
@@ -37,7 +41,7 @@ struct FriendService {
         }
     }
     
-    static func fetchFriends(completion: @escaping([User]) -> Void) {
+    static func fetchMyFriends(completion: @escaping([User]) -> Void) {
         var users = [User]()
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         COLLECTION_LIST.document(currentUid).collection("friend-list").getDocuments { (snapshot, error) in
@@ -61,17 +65,17 @@ struct FriendService {
         }
     }
     
-//    static func fetchFriendsLocation(completion: @escaping(String) -> Void) {
-//        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-//        COLLECTION_LIST.document(currentUid).collection("friend-list").getDocuments { (snapshot, error) in
-//            guard let snapshot = snapshot else { return }
-//            for document in snapshot.documents {
-//                let uid = document.documentID
-//                UserService.fetchUser(withUid: uid) { user in
-//                    
-//                    completion(uid)
-//                }
-//            }
-//        }
-//    }
+    static func fetchFrineds(withUid uid: String, completion: @escaping([User]) -> Void) {
+        var users = [User]()
+        COLLECTION_LIST.document(uid).collection("friend-list").getDocuments { snapshot, error in
+            guard let snapshot = snapshot else { return }
+            for document in snapshot.documents {
+                let uid = document.documentID
+                UserService.fetchUser(withUid: uid) { user in
+                    users.append(user)
+                    completion(users)
+                }
+            }
+        }
+    }
 }

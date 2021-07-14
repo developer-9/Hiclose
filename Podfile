@@ -16,7 +16,8 @@ target 'Hiclose' do
 	pod 'PanModal'
 	pod 'GeoFire'
 	pod 'ImagePicker'
-
+	pod 'AgoraRtcEngine_iOS'
+	pod 'IndicateKit'
   # Pods for Hiclose
 
   target 'HicloseTests' do

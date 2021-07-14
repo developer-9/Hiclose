@@ -212,6 +212,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - AgoraRtcEngine_iOS (3.4.4)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -355,6 +356,7 @@ PODS:
   - gRPC-Core/Interface (1.28.2)
   - GTMSessionFetcher/Core (1.4.0)
   - ImagePicker (3.2.0)
+  - IndicateKit (1.0.3)
   - JGProgressHUD (2.1)
   - leveldb-library (1.22)
   - nanopb (1.30906.0):
@@ -370,6 +372,7 @@ PODS:
   - SDWebImage/Core (5.9.1)
 
 DEPENDENCIES:
+  - AgoraRtcEngine_iOS
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -378,6 +381,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - GeoFire
   - ImagePicker
+  - IndicateKit
   - JGProgressHUD
   - PanModal
   - SDWebImage
@@ -385,6 +389,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
+    - AgoraRtcEngine_iOS
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAnalytics
@@ -405,6 +410,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - ImagePicker
+    - IndicateKit
     - JGProgressHUD
     - leveldb-library
     - nanopb
@@ -415,6 +421,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  AgoraRtcEngine_iOS: a63b9cc61cffc9dfc59e64617e477407b394c5fe
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   Firebase: 8db6f2d1b2c5e2984efba4949a145875a8f65fe5
   FirebaseAnalytics: 5dd088bd2e67bb9d13dbf792d1164ceaf3052193
@@ -435,6 +442,7 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   ImagePicker: 1d950bbb2422548ed58791b4ec7f42fe42920511
+  IndicateKit: c6d3f6511563346cb564ac54b353b15da19d424a
   JGProgressHUD: aa403e9a5b45cae98903c4600cccdd98c0c3ec90
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
@@ -443,6 +451,6 @@ SPEC CHECKSUMS:
   Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
   SDWebImage: a990c053fff71e388a10f3357edb0be17929c9c5
 
-PODFILE CHECKSUM: c40c1003f37fdff08c7b812536f6a9b53ad1e38e
+PODFILE CHECKSUM: 40d26827875dc6e197e6eb7710cf46c25f9f4c0a
 
 COCOAPODS: 1.9.1

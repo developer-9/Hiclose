@@ -23,6 +23,7 @@ class ProfileController: UITableViewController {
     private var user: User? {
         didSet { headerView.user = user }
     }
+    
 //
 //    private var guestBool: Bool! {
 //        didSet {
@@ -84,6 +85,11 @@ class ProfileController: UITableViewController {
         
         tableView.tableFooterView = footerView
         footerView.delegate = self
+    }
+    
+    private func copyMyUid() {
+        guard let user = user else { return }
+        UIPasteboard.general.string = "\(user.uid)"
     }
 }
 
@@ -151,12 +157,27 @@ extension ProfileController: ProfileHeaderDelegate {
     }
     
     func linkShare() {
-        let text = "Let's share Hiclose and tell your best friend about it🔥"
-        let textToShare = [text]
+        guard let user = user else { return }
+        let textView = UITextView()
+        textView.isSelectable = true
+        textView.isEditable = false
+        
+        let textString = "You've received an invitation from \(user.fullname)!!\nEnter the 🔗INVITATION CODE and connect with Takashi now!!\n\nLet's start Hiclose HERE today🔥"
+        
+        let attributedString = NSMutableAttributedString(string: textString)
+        let codeRange = NSString(string: textString).range(of: "INVITATION CODE")
+        let urlRenge = NSString(string: textString).range(of: "HERE")
+        
+        attributedString.addAttribute(.link, value: "https://console.firebase.google.com/u/2/project/hiclose-19909/database/hiclose-19909-default-rtdb/data?hl=ja", range: codeRange)
+        attributedString.addAttribute(.link, value: UIApplication.openSettingsURLString, range: urlRenge)
+        textView.attributedText = attributedString
+        
+        let textToShare: [String] = [textView.text]
         let activityViewController = UIActivityViewController(activityItems: textToShare,
                                                               applicationActivities: nil)
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop,
-                                                         UIActivity.ActivityType.postToFacebook ]
+        
+        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.airDrop,
+                                                        UIActivity.ActivityType.postToFacebook]
         
         self.present(activityViewController, animated: true, completion: nil)
 

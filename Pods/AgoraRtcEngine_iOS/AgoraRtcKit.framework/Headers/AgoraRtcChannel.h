@@ -115,7 +115,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @param uid The user ID. A 32-bit unsigned integer with a value ranging from 1 to (2<sup>32</sup>-1). This parameter must be unique. If `uid` is not assigned (or set as 0), the SDK assigns a `uid` and reports it in the [rtcChannelDidJoinChannel]([AgoraRtcChannelDelegate rtcChannelDidJoinChannel:withUid:elapsed:]) callback. The app must maintain this user ID.
  @param options The channel media options: AgoraRtcChannelMediaOptions
 
- @return - `0`(`AgoraRtmpStreamingErrorCodeOK`): Success.
+ @return - `0`(`AgoraErrorCodeNoError`): Success.
 - < `0`: Failure.
 
   - `-2`(`AgoraErrorCodeInvalidArgument`): The parameter is invalid.
@@ -174,7 +174,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
   - The local client: [rtcChannelDidLeaveChannel]([AgoraRtcChannelDelegate rtcChannelDidLeaveChannel:withStats:]).
   - The remote client: [didOfflineOfUid]([AgoraRtcChannelDelegate rtcChannel:didOfflineOfUid:reason:]), if the user leaving the channel is in a Communication channel, or is a host in a Live-Broadcast channel.
 
- @return - `0`(`AgoraRtmpStreamingErrorCodeOK`): Success.
+ @return - `0`(`AgoraErrorCodeNoError`): Success.
 - < `0`: Failure.
 
   - `-1`(`AgoraErrorCodeFailed`): A general error occurs (no specified reason).
@@ -183,13 +183,64 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  */
 - (int)leaveChannel;
 
+/** Stops or resumes publishing the local audio stream.
+
+ **Note:**
+
+ - When `mute` is set as `YES`, this method does not affect any ongoing audio
+ recording, because it does not disable the microphone.
+ - You can call this method either before or after joining a channel. If you
+ call [setChannelProfile]([AgoraRtcEngineKit setChannelProfile:]) after this
+ method, the SDK resets whether or not to stop publishing the local audio
+ according to the channel profile and user role. Therefore, Agora recommends
+ calling this method after the `setChannelProfile` method.
+ - At most one channel can be in unmute state at the same time. We don't support
+ audio and video unmuted in different channels now.
+
+ @param mute Sets whether to stop publishing the local audio stream.
+
+ * YES: Stop publishing the local audio stream.
+ * NO: (Default) Resumes publishing the local audio stream.
+
+ @return * 0: Success.
+* < 0: Failure.
+ */
+- (int)muteLocalAudioStream:(BOOL)mute;
+
+/** Stops or resumes publishing the local video stream.
+
+ **Note:**
+
+ - This method executes faster than the
+ [enableLocalVideo]([AgoraRtcEngineKit enableLocalVideo:]) method, which
+ controls the sending of the local video stream.
+ - When `mute` is set as `YES`, this method does not affect any ongoing video
+ recording, because it does not disable the camera.
+ - You can call this method either before or after joining a channel. If you
+ call [setChannelProfile]([AgoraRtcEngineKit setChannelProfile:]) after this
+ method, the SDK resets whether or not to stop publishing the local video
+ according to the channel profile and user role. Therefore, Agora recommends
+ calling this method after the `setChannelProfile` method.
+ - At most one channel can be in unmute state at the same time. We don't support
+ audio and video unmuted in different channels now.
+
+ @param mute Sets whether to stop publishing the local video stream.
+
+ * YES: Stop publishing the local video stream.
+ * NO: (Default) Resumes publishing the local video stream.
+
+ @return * 0: Success.
+* < 0: Failure.
+ */
+- (int)muteLocalVideoStream:(BOOL)mute;
+
 /** Publishes the local stream to the channel.
 
  You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns the AgoraErrorCodeRefused(-5)：
 
  - This method publishes one stream only to the channel corresponding to the current AgoraRtcChannel instance.
- - In a Live-Broadcast channel, only a host can call this method. To switch the client role, call [setClientRole]([AgoraRtcChannel setClientRole:]) of the current AgoraRtcChannel instance.
  - You can publish a stream to only one channel at a time. For details, see the advanced guide *Join Multiple Channels*.
+ - This method is equal to muteLocalAudioStream(NO) and muteLocalVideoStream(NO).
 
  @return - 0: Success.
  - < 0: Failure.
@@ -201,6 +252,8 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 /** Stops publishing a stream to the channel.
 
  If you call this method in a channel where you are not publishing streams, the SDK returns AgoraErrorCodeRefused(-5).
+
+ - This method is equal to muteLocalAudioStream(YES) and muteLocalVideoStream(YES).
 
  @return - 0: Success.
  - < 0: Failure.
@@ -223,7 +276,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  - `AgoraClientRoleBroadcaster(1)`: Host. A host can both send and receive streams.
  - `AgoraClientRoleAudience(2)`: Audience, the default role. An audience can only receive streams.
 
- @return - `0`(`AgoraRtmpStreamingErrorCodeOK`): Success.
+ @return - `0`(`AgoraErrorCodeNoError`): Success.
 - < `0`: Failure.
 
   - `-1`(`AgoraErrorCodeFailed`): A general error occurs (no specified reason).
@@ -259,7 +312,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
  @param role The role of a user in a interactive live streaming. See [AgoraClientRole](AgoraClientRole).
  @param options The detailed options of a user, including user level. See [AgoraClientRoleOptions](AgoraClientRoleOptions).
 
- @return - 0(`AgoraRtmpStreamingErrorCodeOK`): Success.
+ @return - 0(`AgoraErrorCodeNoError`): Success.
  - < 0: Failure.
 
    - `-1`(`AgoraErrorCodeFailed`): A general error occurs (no specified reason).
@@ -282,7 +335,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
  @param token The new token.
 
- @return - `0`(`AgoraRtmpStreamingErrorCodeOK`): Success.
+ @return - `0`(`AgoraErrorCodeNoError`): Success.
 - < `0`: Failure.
 
   - `-1`(`AgoraErrorCodeFailed`): A general error occurs (no specified reason).
@@ -428,7 +481,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
 /** Stops or resumes subscribing to the audio streams of all remote users by default.
 
- @deprecated This method is deprecated from v3.3.0.
+ **Deprecated** This method is deprecated from v3.3.0.
 
  Call this method after joining a channel. After successfully calling this
  method, the local user stops or resumes subscribing to the audio streams of
@@ -460,7 +513,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannel : NSObject
 
 /** Stops or resumes subscribing to the video streams of all remote users by default.
 
- @deprecated This method is deprecated from v3.3.0.
+ **Deprecated** This method is deprecated from v3.3.0.
 
  Call this method after joining a channel. After successfully calling this
  method, the local user stops or resumes subscribing to the video streams of
@@ -737,7 +790,7 @@ This method call triggers the [rtmpStreamingChangedToState]([AgoraRtcChannelDele
 - (int)setLiveTranscoding:(AgoraLiveTranscoding* _Nullable)transcoding;
 /** Creates a data stream.
 
- @deprecated This method is deprecated from v3.3.0. Use the
+ **Deprecated** This method is deprecated from v3.3.0. Use the
  [createDataStream]([AgoraRtcChannel createDataStream:config:])2 method
  instead.
 
@@ -842,6 +895,21 @@ A failed `sendStreamMessage` method call triggers the [didOccurStreamMessageErro
  - < 0: Failure.
  */
 - (int)updateChannelMediaRelay:(AgoraChannelMediaRelayConfiguration* _Nonnull)config;
+
+/** pause the channels for media stream relay.
+ * @return
+ * - 0: Success.
+ * - < 0: Failure.
+ */
+- (int)pauseAllChannelMediaRelay;
+
+/** resume the channels for media stream relay.
+ * @return
+ * - 0: Success.
+ * - < 0: Failure.
+ */
+- (int)resumeAllChannelMediaRelay;
+
 /** Stops the media stream relay.
 
  Once the relay stops, the host quits all the destination channels.
@@ -1016,7 +1084,7 @@ See [AgoraErrorCode](AgoraErrorCode).
 
  When the app calls the [leaveChannel]([AgoraRtcChannel leaveChannel]) method, this callback notifies the app that a user leaves a channel.
 
- With this callback, the app retrieves information, such as the call duration and the statistics.
+ With this callback, the app gets information, such as the call duration and the statistics.
 
  @param rtcChannel AgoraRtcChannel
  @param stats  Statistics of the call: [AgoraChannelStats](AgoraChannelStats).

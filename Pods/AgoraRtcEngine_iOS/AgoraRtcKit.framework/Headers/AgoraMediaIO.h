@@ -26,21 +26,6 @@ typedef NS_ENUM(NSUInteger, AgoraVideoPixelFormat) {
   AgoraVideoPixelFormatNV12 = 8,
 };
 
-/** Video rotation.
-
- This enumeration defines the rotating angle of the video. Agora supports rotating clockwise by 0, 90, 180, and 270 degrees.
- */
-typedef NS_ENUM(NSInteger, AgoraVideoRotation) {
-  /** No rotation */
-  AgoraVideoRotationNone = 0,
-  /** 90 degrees */
-  AgoraVideoRotation90 = 1,
-  /** 180 degrees */
-  AgoraVideoRotation180 = 2,
-  /** 270 degrees */
-  AgoraVideoRotation270 = 3,
-};
-
 /** Video buffer type */
 typedef NS_ENUM(NSInteger, AgoraVideoBufferType) {
   /** Use a pixel buffer to transmit the video data. */
@@ -97,7 +82,7 @@ typedef NS_ENUM(NSInteger, AgoraVideoCaptureType) {
  * Enables the Video Source ([shouldStart](shouldStart))
  * Disables the Video Source ([shouldStop](shouldStop))
  * Releases the Video Source ([shouldDispose](shouldDispose))
- * Retrieves the Buffer Type (AgoraVideoBufferType)
+ * Gets the Buffer Type (AgoraVideoBufferType)
  * Gets the capture type of the custom video source (AgoraVideoCaptureType)
  * Gets the content hint of the custom video source (AgoraVideoContentHint)
 
@@ -152,7 +137,7 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  */
 - (void)shouldDispose;
 
-/** Retrieves the buffer type.
+/** Gets the buffer type.
 
  Passes the buffer type previously set in `AgoraVideoBufferType` to the media engine. This buffer type is used to set up the correct media engine environment.
 
@@ -200,8 +185,8 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  * Enables the Video Sink ([shouldStart](shouldStart))
  * Disables the Video Sink ([shouldStop](shouldStop))
  * Releases the Video Sink ([shouldDispose](shouldDispose))
- * Retrieves the Buffer Type ([bufferType](bufferType))
- * Retrieves the Pixel Format ([pixelFormat](pixelFormat))
+ * Gets the Buffer Type ([bufferType](bufferType))
+ * Gets the Pixel Format ([pixelFormat](pixelFormat))
  * (Optional) Outputs the Video in the Pixel Buffer ([renderPixelBuffer](renderPixelBuffer:rotation:))
  * (Optional) Outputs the Video in the Raw Data ([renderRawData](renderRawData:size:rotation:))
 
@@ -247,13 +232,13 @@ Call this method when AgoraVideoFrameConsumer is released by the media engine. Y
  */
 - (void)shouldDispose;
 
-/** Retrieves the buffer type and passes the buffer type specified in `AgoraVideoBufferType` to the media engine.
+/** Gets the buffer type and passes the buffer type specified in `AgoraVideoBufferType` to the media engine.
 
  @return bufferType AgoraVideoBufferType
  */
 - (AgoraVideoBufferType)bufferType;
 
-/** Retrieves the pixel format and passes it to the media engine.
+/** Gets the pixel format and passes it to the media engine.
 
  @return pixelFormat AgoraVideoPixelFormat
  */

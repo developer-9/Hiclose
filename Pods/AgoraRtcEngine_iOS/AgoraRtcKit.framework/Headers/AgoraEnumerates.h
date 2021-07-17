@@ -204,8 +204,11 @@ typedef NS_ENUM(NSInteger, AgoraErrorCode) {
   AgoraErrorCodePublishStreamFormatNotSuppported = 156,
   /** 157: The extension library is not integrated, such as the library for enabling deep-learning noise reduction. */
   AgoraErrorCodeModuleNotFound = 157,
+  /** 160: The client is already recording audio. To start a new recording, call [stopAudioRecording]([AgoraRtcEngineKit stopAudioRecording])
+   to stop the current recording first, and then call [startAudioRecordingWithConfig]([AgoraRtcEngineKit startAudioRecordingWithConfig:]).
 
-  /** 160: The recording operation has been performed. */
+   @since v3.4.0
+   */
   AgoraErrorCodeAlreadyInRecording = 160,
   /** 1001: Fails to load the media engine. */
   AgoraErrorCodeLoadMediaEngine = 1001,
@@ -271,26 +274,36 @@ typedef NS_ENUM(NSInteger, AgoraErrorCode) {
   AgoraErrorCodeVcmEncoderSetError = 1603,
 };
 
-/** The state of the audio mixing file. */
+/** The current music file playback state. Reports in the [localAudioMixingStateDidChanged]([AgoraRtcEngineDelegate rtcEngine:localAudioMixingStateDidChanged:reason:]) callback. */
 typedef NS_ENUM(NSInteger, AgoraAudioMixingStateCode) {
-  /** 710: The audio mixing file is playing after the method call of [startAudioMixing]([AgoraRtcEngineKit startAudioMixing:loopback:replace:cycle:]) or [resumeAudioMixing]([AgoraRtcEngineKit resumeAudioMixing]) succeeds. */
+  /** 710: The music file is playing.
+   <p>This state comes with one of the following associated reasons:</p>
+   <li><code>AgoraAudioMixingReasonStartedByUser(720)</code></li>
+   <li><code>AgoraAudioMixingReasonOneLoopCompleted(721)</code></li>
+   <li><code>AgoraAudioMixingReasonStartNewLoop(722)</code></li>
+   <li><code>AgoraAudioMixingReasonResumedByUser(726)</code></li>
+   */
   AgoraAudioMixingStatePlaying = 710,
-  /** 711: The audio mixing file pauses playing after the method call of [pauseAudioMixing]([AgoraRtcEngineKit pauseAudioMixing]) succeeds. */
+  /** 711: The music file pauses playing.
+   <p>This state comes with <code>AgoraAudioMixingReasonPausedByUser(725)</code>.</p>
+   */
   AgoraAudioMixingStatePaused = 711,
-  /** 713: The audio mixing file stops playing after the method call of [stopAudioMixing]([AgoraRtcEngineKit stopAudioMixing]) succeeds. */
+  /** 713: The music file stops playing.
+   <p>This state comes with one of the following associated reasons:</p>
+   <li><code>AgoraAudioMixingReasonAllLoopsCompleted(723)</code></li>
+   <li><code>AgoraAudioMixingReasonStoppedByUser(724)</code></li>
+   */
   AgoraAudioMixingStateStopped = 713,
-  /** 714: An exception occurs during the playback of the audio mixing file. See `errorCode`. */
+  /** 714: An exception occurs during the playback of the music file.
+   <p>This state comes with one of the following associated reasons:</p>
+   <li><code>AgoraAudioMixingReasonCanNotOpen(701)</code></li>
+   <li><code>AgoraAudioMixingReasonTooFrequentCall(702)</code></li>
+   <li><code>AgoraAudioMixingReasonInterruptedEOF(703)</code></li>
+   */
   AgoraAudioMixingStateFailed = 714,
 };
 
-/** Audio Mixing Error Code.
-
-**DEPRECATED**
-
-Please use `AgoraAudioMixingReasonCode`.
-
-The error code of the audio mixing file.
-*/
+/** Audio Mixing Error Code. <p>**Deprecated** from v3.4.0. Use AgoraAudioMixingReasonCode instead.</p> */
 typedef NS_ENUM(NSInteger, AgoraAudioMixingErrorCode) {
   /** 701: The SDK cannot open the audio mixing file. */
   AgoraAudioMixingErrorCanNotOpen __deprecated_enum_msg("AgoraAudioMixingErrorCanNotOpen is deprecated.") = 701,
@@ -302,27 +315,40 @@ typedef NS_ENUM(NSInteger, AgoraAudioMixingErrorCode) {
   AgoraAudioMixingErrorOK __deprecated_enum_msg("AgoraAudioMixingErrorOK is deprecated.") = 0,
 };
 
-/**  The reason of audio mixing state change. */
+/**  The reason for the change of the music file playback state. Reports in the [localAudioMixingStateDidChanged]([AgoraRtcEngineDelegate rtcEngine:localAudioMixingStateDidChanged:reason:]) callback. @since 3.4.0 */
 typedef NS_ENUM(NSInteger, AgoraAudioMixingReasonCode) {
-  /** 701: The SDK cannot open the audio mixing file. */
+  /** 701: The SDK cannot open the music file. Possible causes include the local music file does not exist, the SDK
+   does not support the file format, or the SDK cannot access the music file URL.
+   */
   AgoraAudioMixingReasonCanNotOpen = 701,
-  /** 702: The SDK opens the audio mixing file too frequently. */
+  /** 702: The SDK opens the music file too frequently. If you need to call
+   [startAudioMixing]([AgoraRtcEngineKit startAudioMixing:loopback:replace:cycle:startPos:]) multiple times, ensure that the call
+   interval is longer than 500 ms.
+   */
   AgoraAudioMixingReasonTooFrequentCall = 702,
-  /** 703: The opening of the audio mixing file is interrupted. */
+  /** 703: The music file playback is interrupted.
+   */
   AgoraAudioMixingReasonInterruptedEOF = 703,
-  /** 720: The audio mixing is started by user. */
+  /** 720: Successfully calls [startAudioMixing]([AgoraRtcEngineKit startAudioMixing:loopback:replace:cycle:startPos:]) to play a music file.
+   */
   AgoraAudioMixingReasonStartedByUser = 720,
-  /** 721: The audio mixing file is played once. */
+  /** 721: The music file completes a loop playback.
+   */
   AgoraAudioMixingReasonOneLoopCompleted = 721,
-  /** 722: The audio mixing file is playing in a new loop. */
+  /** 722: The music file starts a new loop playback.
+   */
   AgoraAudioMixingReasonStartNewLoop = 722,
-  /** 723: The audio mixing file is all played out. */
+  /** 723: The music file completes all loop playback.
+   */
   AgoraAudioMixingReasonAllLoopsCompleted = 723,
-  /** 724: Playing of audio file is stopped by user. */
+  /** 724: Successfully calls [stopAudioMixing]([AgoraRtcEngineKit stopAudioMixing]) to stop playing the music file.
+   */
   AgoraAudioMixingReasonStoppedByUser = 724,
-  /** 725: Playing of audio file is paused by user. */
+  /** 725: Successfully calls [pauseAudioMixing]([AgoraRtcEngineKit pauseAudioMixing]) to pause playing the music file.
+   */
   AgoraAudioMixingReasonPausedByUser = 725,
-  /** 726: Playing of audio file is resumed by user. */
+  /** 726: Successfully calls [resumeAudioMixing]([AgoraRtcEngineKit resumeAudioMixing]) to resume playing the music file.
+   */
   AgoraAudioMixingReasonResumedByUser = 726,
 };
 
@@ -405,13 +431,13 @@ typedef NS_ENUM(NSInteger, AgoraVideoProfile) {
   AgoraVideoProfileLandscape1080P_3 = 62,
   /** (macOS only) Resolution 1920 * 1080, frame rate 60 fps, bitrate 4780 Kbps. */
   AgoraVideoProfileLandscape1080P_5 = 64,
-  /** (macOS only) Resolution 2560 * 1440, frame rate 30 fps, bitrate 4850 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfileLandscape1440P = 66,
-  /** (macOS only) Resolution 2560 * 1440, frame rate 60 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfileLandscape1440P_2 = 67,
-  /** (macOS only) Resolution 3840 * 2160, frame rate 30 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfileLandscape4K = 70,
-  /** (macOS only) Resolution 3840 * 2160, frame rate 60 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfileLandscape4K_3 = 72,
 
   /** Resolution 120 * 160, frame rate 15 fps, bitrate 65 Kbps. */
@@ -476,13 +502,13 @@ typedef NS_ENUM(NSInteger, AgoraVideoProfile) {
   AgoraVideoProfilePortrait1080P_3 = 1062,
   /** (macOS only) Resolution 1080 * 1920, frame rate 60 fps, bitrate 4780 Kbps. */
   AgoraVideoProfilePortrait1080P_5 = 1064,
-  /** (macOS only) Resolution 1440 * 2560, frame rate 30 fps, bitrate 4850 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfilePortrait1440P = 1066,
-  /** (macOS only) Resolution 1440 * 2560, frame rate 60 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfilePortrait1440P_2 = 1067,
-  /** (macOS only) Resolution 2160 * 3840, frame rate 30 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfilePortrait4K = 1070,
-  /** (macOS only) Resolution 2160 * 3840, frame rate 60 fps, bitrate 6500 Kbps. */
+  /** Reserved for future use. */
   AgoraVideoProfilePortrait4K_3 = 1072,
   /** (Default) Resolution 640 * 360, frame rate 15 fps, bitrate 400 Kbps. */
   AgoraVideoProfileDEFAULT = AgoraVideoProfileLandscape360P,
@@ -616,7 +642,7 @@ typedef NS_ENUM(NSInteger, AgoraMediaType) {
 typedef NS_ENUM(NSInteger, AgoraEncryptionMode) {
   /** 0: This mode is deprecated. */
   AgoraEncryptionModeNone __deprecated_enum_msg("AgoraEncryptionModeNone is deprecated.") = 0,
-  /** 1: (Default) 128-bit AES encryption, XTS mode. */
+  /** 1: 128-bit AES encryption, XTS mode. */
   AgoraEncryptionModeAES128XTS = 1,
   /** 2: 128-bit AES encryption, ECB mode. */
   AgoraEncryptionModeAES128ECB = 2,
@@ -634,6 +660,16 @@ typedef NS_ENUM(NSInteger, AgoraEncryptionMode) {
    @since v3.3.1
    */
   AgoraEncryptionModeAES256GCM = 6,
+  /** 7: (Default) 128-bit AES encryption, GCM mode, with custom KDF salt.
+
+   @since v3.4.1
+   */
+  AgoraEncryptionModeAES128GCM2 = 7,
+  /** 8: 256-bit AES encryption, GCM mode, with custom KDF salt.
+
+   @since v3.4.1
+   */
+  AgoraEncryptionModeAES256GCM2 = 8,
   /** Enumerator boundary */
   AgoraEncryptionModeEnd,
 };
@@ -688,12 +724,16 @@ typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingErrorCode) {
   AgoraRtmpStreamingErrorCodeStreamNotFound = 9,
   /** The format of the RTMP or RTMPS streaming URL is not supported. Check whether the URL format is correct. */
   AgoraRtmpStreamingErrorCodeFormatNotSupported = 10,
+  /** The RTMP streaming unpublishes successfully. */
+  AgoraRtmpStreamingErrorCodeUnpublishOK = 100,
 };
 
 /** Events during the RTMP or RTMPS streaming. */
 typedef NS_ENUM(NSUInteger, AgoraRtmpStreamingEvent) {
   /** An error occurs when you add a background image or a watermark image to the RTMP stream. */
   AgoraRtmpStreamingEventFailedLoadImage = 1,
+  /** The chosen URL address is already in use for CDN live streaming. */
+  AgoraRtmpStreamingEventUrlAlreadyInUse = 2,
 };
 
 /** State of importing an external video stream in the interactive live streaming. */
@@ -738,23 +778,23 @@ typedef NS_ENUM(NSUInteger, AgoraLogFilter) {
   AgoraLogFilterCritical = 0x0008,
 };
 
-/** Audio recording quality. */
+/** Audio recording quality, which is set in [startAudioRecordingWithConfig]([AgoraRtcEngineKit startAudioRecordingWithConfig:]). */
 typedef NS_ENUM(NSInteger, AgoraAudioRecordingQuality) {
-  /** Low quality: The sample rate is 32 KHz, and the file size is around 1.2 MB after 10 minutes of recording. */
+  /** 0: Low quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 1.2 MB. */
   AgoraAudioRecordingQualityLow = 0,
-  /** Medium quality: The sample rate is 32 KHz, and the file size is around 2 MB after 10 minutes of recording. */
+  /** 1: (Default) Medium quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 2 MB. */
   AgoraAudioRecordingQualityMedium = 1,
-  /** High quality: The sample rate is 32 KHz, and the file size is around 3.75 MB after 10 minutes of recording. */
+  /** 2: High quality. For example, the size of an AAC file with a sample rate of 32,000 Hz and a 10-minute recording is approximately 3.75 MB. */
   AgoraAudioRecordingQualityHigh = 2
 };
 
-/** Audio recording position. */
+/** Recording content, which is set in [startAudioRecordingWithConfig]([AgoraRtcEngineKit startAudioRecordingWithConfig:]). */
 typedef NS_ENUM(NSInteger, AgoraAudioRecordingPosition) {
-  /** Mixed recoding and playback: The SDK will record the voices of all users in the channel. */
+  /** 0: (Default) Records the mixed audio of the local user and all remote users. */
   AgoraAudioRecordingPositionMixedRecordingAndPlayback = 0,
-  /** Only recording: The SDK will record the voice of the local user. */
+  /** 1: Records the audio of the local user only. */
   AgoraAudioRecordingPositionRecording = 1,
-  /** Only mixed playback: The SDK will record the voices of remote users. */
+  /** 2: Records the audio of all remote users only. */
   AgoraAudioRecordingPositionMixedPlayback = 2
 };
 
@@ -1025,6 +1065,17 @@ typedef NS_ENUM(NSUInteger, AgoraSuperResolutionStateReason) {
   AgoraSRStateReasonDeviceNotSupported = 3,
 };
 
+/** The reason for video background substitution success or failed. */
+typedef NS_ENUM(NSUInteger, AgoraVirtualBackgroundSourceStateReason) {
+  AgoraVBSStateReasonSuccess = 0,
+  // background image does not exist
+  AgoraVBSStateReasonImageNotExist = 1,
+  // color format is not supported
+  AgoraVBSStateReasonColorFormatNotSupported = 2,
+  // The device is not supported
+  AgoraVBSStateReasonDeviceNotSupported = 3,
+};
+
 /** Stream fallback option. */
 typedef NS_ENUM(NSInteger, AgoraStreamFallbackOptions) {
   /** No fallback behavior for the local/remote video stream when the uplink/downlink network condition is unreliable. The quality of the stream is not guaranteed. */
@@ -1088,29 +1139,29 @@ typedef NS_ENUM(NSInteger, AgoraAudioScenario) {
   AgoraAudioScenarioMeeting = 8,
 };
 
-/** Audio output routing. */
+/** The current audio route. Reports in the [didAudioRouteChanged]([AgoraRtcEngineDelegate rtcEngine:didAudioRouteChanged:]) callback. */
 typedef NS_ENUM(NSInteger, AgoraAudioOutputRouting) {
-  /** Default. */
+  /** -1: Default audio route. */
   AgoraAudioOutputRoutingDefault = -1,
-  /** Headset.*/
+  /** 0: The audio route is a headset with a microphone.*/
   AgoraAudioOutputRoutingHeadset = 0,
-  /** Earpiece. */
+  /** 1: The audio route is an earpiece. */
   AgoraAudioOutputRoutingEarpiece = 1,
-  /** Headset with no microphone. */
+  /** 2: The audio route is a headset without a microphone. */
   AgoraAudioOutputRoutingHeadsetNoMic = 2,
-  /** Speakerphone. */
+  /** 3: The audio route is the speaker that comes with the device. */
   AgoraAudioOutputRoutingSpeakerphone = 3,
-  /** Loudspeaker. */
+  /** 4: The audio route is a Bluetooth headset. */
   AgoraAudioOutputRoutingLoudspeaker = 4,
-  /** Bluetooth headset. */
+  /** 5: Bluetooth headset. */
   AgoraAudioOutputRoutingHeadsetBluetooth = 5,
-  /** USB peripheral (macOS only). */
+  /** 6: (macOS only) The audio route is a USB peripheral device. */
   AgoraAudioOutputRoutingUsb = 6,
-  /** HDMI peripheral (macOS only). */
+  /** 7: (macOS only) The audio route is an HDMI peripheral device. */
   AgoraAudioOutputRoutingHdmi = 7,
-  /** DisplayPort peripheral (macOS only). */
+  /** 8: (macOS only) The audio route is a DisplayPort peripheral device. */
   AgoraAudioOutputRoutingDisplayPort = 8,
-  /** Apple AirPlay (macOS only). */
+  /** 9: The audio route is Apple AirPlay. */
   AgoraAudioOutputRoutingAirPlay = 9
 };
 
@@ -1687,6 +1738,19 @@ typedef NS_ENUM(NSInteger, AgoraChannelMediaRelayEvent) {
   /** 11: The video profile is sent to the server.
    */
   AgoraChannelMediaRelayEventVideoProfileUpdate = 11,
+  /** 12: The packet is pause to sent into channel success.
+   */
+  AgoraChannelMediaRelayEventPauseSendPacketToDestChannelSuccess = 12,
+  /** 13: The packet is pause to sent into channel failed.
+   */
+  AgoraChannelMediaRelayEventPauseSendPacketToDestChannelFailed = 13,
+  /** 14: The packet is resume to sent into channel success.
+   */
+  AgoraChannelMediaRelayEventResumeSendPacketToDestChannelSuccess = 14,
+  /** 15: The packet is resume to sent into channel failed.
+   */
+  AgoraChannelMediaRelayEventResumeSendPacketToDestChannelFailed = 15,
+
 };
 
 /** The error code in AgoraChannelMediaRelayError.
@@ -1750,11 +1814,24 @@ typedef NS_ENUM(NSInteger, AgoraNetworkType) {
 
 /** The video encoding degradation preference under limited bandwidth. */
 typedef NS_ENUM(NSInteger, AgoraDegradationPreference) {
-  /** (Default) Degrades the frame rate to guarantee the video quality. */
+  /** (Default) Prefers to reduce the video frame rate while maintaining video quality during video encoding under
+   limited bandwidth. This degradation preference is suitable for scenarios where video quality is prioritized.
+
+   @note In the `Communication` channel profile, the resolution of the video sent may change, so remote users need to
+   handle this issue. See [videoSizeChangedOfUid]([AgoraRtcEngineDelegate rtcEngine:videoSizeChangedOfUid:size:rotation:]).
+   */
   AgoraDegradationMaintainQuality = 0,
-  /** Degrades the video quality to guarantee the frame rate. */
+  /** Prefers to reduce the video quality while maintaining the video frame rate during video encoding under limited
+   bandwidth. This degradation preference is suitable for scenarios where smoothness is prioritized and video quality
+   is allowed to be reduced.
+   */
   AgoraDegradationMaintainFramerate = 1,
-  /** Reserved for future use. */
+  /** Reduces the video frame rate and video quality simultaneously during video encoding under limited bandwidth.
+   `AgoraDegradationBalanced` has a lower reduction than `AgoraDegradationMaintainQuality` and `AgoraDegradationMaintainFramerate`,
+   and this preference is suitable for scenarios where both smoothness and video quality are a priority.
+
+   @note The resolution of the video sent may change, so remote users need to handle this issue. See [videoSizeChangedOfUid]([AgoraRtcEngineDelegate rtcEngine:videoSizeChangedOfUid:size:rotation:]).
+   */
   AgoraDegradationBalanced = 2,
 };
 /** The lightening contrast level. */
@@ -1765,6 +1842,13 @@ typedef NS_ENUM(NSUInteger, AgoraLighteningContrastLevel) {
   AgoraLighteningContrastNormal = 1,
   /** High contrast level. */
   AgoraLighteningContrastHigh = 2,
+};
+
+typedef NS_ENUM(NSUInteger, AgoraVirtualBackgroundSourceType) {
+  /** Background source is hex color string*/
+  AgoraVirtualBackgroundColor = 1,
+  /** Background source is image path, only support png format*/
+  AgoraVirtualBackgroundImg = 2,
 };
 
 /** The state of the probe test result. */
@@ -1816,7 +1900,10 @@ typedef NS_ENUM(NSInteger, AgoraLocalVideoStreamError) {
    @since v3.3.0
    */
   AgoraLocalVideoStreamErrorCaptureMultipleForegroundApps = 7,
-  /** 8: The camera not found */
+  /** 8: The SDK cannot find the local video capture device.
+
+   @since v3.4.0
+   */
   AgoraLocalVideoStreamErrorCaptureNoDeviceFound = 8,
   /** 11: (macOS only) The shared window is minimized when you call
    [startScreenCaptureByWindowId]([AgoraRtcEngineKit startScreenCaptureByWindowId:rectangle:parameters:]) to share a window.
@@ -1899,4 +1986,99 @@ typedef NS_ENUM(NSUInteger, AgoraCloudProxyType) {
   /** The cloud proxy for the TCP (encrypted) protocol.
    */
   AgoraTcpProxy = 2,
+};
+
+/** Video rotation.
+
+ This enumeration defines the rotating angle of the video. Agora supports rotating clockwise by 0,
+ 90, 180, and 270 degrees.
+ */
+typedef NS_ENUM(NSInteger, AgoraVideoRotation) {
+  /** No rotation */
+  AgoraVideoRotationNone = 0,
+  /** 90 degrees */
+  AgoraVideoRotation90 = 1,
+  /** 180 degrees */
+  AgoraVideoRotation180 = 2,
+  /** 270 degrees */
+  AgoraVideoRotation270 = 3,
+};
+
+/** The video frame type. */
+typedef NS_ENUM(NSUInteger, AgoraVideoFrameType) {
+  /**
+   * 0: YUV420
+   */
+  AgoraVideoFrameTypeYUV420 = 0,  // YUV 420 format
+  /**
+   * 1: YUV422
+   */
+  AgoraVideoFrameTypeYUV422 = 1,  // YUV 422 format
+  /**
+   * 2: RGBA
+   */
+  AgoraVideoFrameTypeRGBA = 2,  // RGBA format
+};
+
+/** The video encode  frame type. */
+typedef NS_ENUM(NSUInteger, AgoraVideoEncodeType) {
+  /**
+   * 0: default  A black frame
+   */
+  AgoraVideoEncodeTypeBlankFrame = 0,
+  /**
+   * 3: The key frame
+   */
+  AgoraVideoEncodeTypeKeyFrame = 3,
+  /**
+   * 4: The delta frame
+   */
+  AgoraVideoEncodeTypeDetaFrame = 4,
+  /**
+   * 5:  The B-frame
+   */
+  AgoraVideoEncodeTypeBFrame = 5,
+
+};
+
+typedef NS_ENUM(NSUInteger, AgoraVideoFramePosition) {
+  /**
+   * 1: The post-capturer position, which corresponds to the video data in the onCaptureVideoFrame
+   * callback.
+   */
+  AgoraVideoFramePositionPostCapture = 1 << 0,
+  /**
+   * 2: The pre-renderer position, which corresponds to the video data in the onRenderVideoFrame
+   * callback.
+   */
+  AgoraVideoFramePositionPreRenderer = 1 << 1,
+  /**
+   * 4: The pre-encoder position, which corresponds to the video data in the onPreEncodeVideoFrame
+   * callback.
+   */
+  AgoraVideoFramePositionPreEncoder = 1 << 2,
+};
+
+typedef NS_ENUM(NSUInteger, AgoraAudioFramePosition) {
+  /**
+   *  The playback frame position, which corresponds to the video data in the onPlaybackFrame
+   *  callback.
+   */
+  AgoraAudioFramePositionPlayback = 1 << 0,
+  /**
+   *  The record frame position, which corresponds to the video data in the onRecordFrame
+   * callback.
+   */
+  AgoraAudioFramePositionRecord = 1 << 1,
+  /**
+   *  The mixed frame position, which corresponds to the video data in the onMixedFrame
+   * callback.
+   */
+  AgoraAudioFramePositionMixed = 1 << 2,
+  /**
+   *  The playback before mixing frame position, which corresponds to the video data in the onPlaybackFrameBeforeMixing
+   *  callback.
+   */
+  AgoraAudioFramePositionBeforeMixing = 1 << 3,
+
 };

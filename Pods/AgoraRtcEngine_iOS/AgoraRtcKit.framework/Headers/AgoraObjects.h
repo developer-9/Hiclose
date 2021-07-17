@@ -55,6 +55,33 @@ where external video sources are used.
 @property(assign, nonatomic) NSInteger avSyncType;
 @end
 
+/** The raw audio data.
+ */
+__attribute__((visibility("default"))) @interface AgoraAudioParam : NSObject
+
+/**The sample rate returned in the {@link IAudioFrameObserver} callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
+ */
+@property(assign, nonatomic) NSInteger sampleRate;
+
+/*The number of channels  returned in the {@link IAudioFrameObserver} callback:
+ *                - 1: Mono
+ *                - 2: Stereo
+ */
+@property(assign, nonatomic) NSInteger channel;
+
+/*The use mode of the {@link IAudioFrameObserver} callback:
+ *             - {@link Constants#RAW_AUDIO_FRAME_OP_MODE_READ_ONLY RAW_AUDIO_FRAME_OP_MODE_READ_ONLY(0)}: Read-only mode: Users only read the AudioFrame data without modifying anything. For example, when users acquire the data with the Agora SDK then push the RTMP or RTMPS streams.
+ *             - {@link Constants#RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY(1)}: Write-only mode: Users replace the AudioFrame data with their own data. For example, users can use this mode when they acquire data by themselves.
+ *             - {@link Constants#RAW_AUDIO_FRAME_OP_MODE_READ_WRITE RAW_AUDIO_FRAME_OP_MODE_READ_WRITE(2)}: Read and write mode: Users read the data from AudioFrame, modify it, and then play it. For example, users can use this mode when they have their own sound-effect processing module, and want to do some voice post-processing, such as a voice change.
+ */
+@property(assign, nonatomic) AgoraAudioRawFrameOperationMode mode;
+
+/**The number of samples the {@link IAudioFrameObserver} callback returns. In RTMP or RTMPS streaming scenarios, set it as 1024.
+ */
+@property(assign, nonatomic) NSInteger samplesPerCall;
+
+@end
+
 /** Properties of the video canvas object.
  */
 __attribute__((visibility("default"))) @interface AgoraRtcVideoCanvas : NSObject
@@ -97,13 +124,13 @@ __attribute__((visibility("default"))) @interface AgoraRtcVideoCanvas : NSObject
 
 /** The configurations of the last-mile network probe test. */
 __attribute__((visibility("default"))) @interface AgoraLastmileProbeConfig : NSObject
-/** Sets whether or not to test the uplink network. Some users, for example, the audience in the interactive live streaming channel, do not need such a test.
+/** Sets whether to test the uplink network. Some users, for example, the audience in the interactive live streaming channel, do not need such a test.
 
 - NO: disables the test.
 - YES: enables the test.
 */
 @property(assign, nonatomic) BOOL probeUplink;
-/** Sets whether or not to test the downlink network.
+/** Sets whether to test the downlink network.
 
 - NO: disables the test.
 - YES: enables the test.
@@ -375,16 +402,20 @@ __attribute__((visibility("default"))) @interface AgoraRtcAudioVolumeInfo : NSOb
 @property(copy, nonatomic) NSString* _Nonnull channelId;
 @end
 
-/** Configurations of rhythm player.
- */
+/** **Since** v3.4.0. The metronome configuration, which is set in [startRhythmPlayer]([AgoraRtcEngineKit startRhythmPlayer:sound2:config:]) or [configRhythmPlayer]([AgoraRtcEngineKit configRhythmPlayer:]). */
 __attribute__((visibility("default"))) @interface AgoraRtcRhythmPlayerConfig : NSObject
-/** Beats per measure.
+/** The number of beats per measure. The range is 1 to 9. The default value is 4, which means that each measure
+ contains one downbeat and three upbeats.
  */
 @property(assign, nonatomic) NSUInteger beatsPerMeasure;
-/** Beats per minute.
+/** Tempo (beats per minute). The range is 60 to 360. The default value is 60, which means that the metronome plays 60
+ beats in one minute.
  */
 @property(assign, nonatomic) NSUInteger beatsPerMinute;
-/** Whether rhythm publish to far end.
+/** Whether to publish the sound of the metronome to remote users:
+
+ - `YES`: (Default) Publish. Both the local user and remote users can hear the metronome.
+ - `NO`: Do not publish. Only the local user can hear the metronome.
  */
 @property(assign, nonatomic) BOOL publish;
 @end
@@ -501,8 +532,6 @@ You can customize the dimension, or select from the following list:
  - AgoraVideoDimension960x720
  - AgoraVideoDimension1280x720
  - AgoraVideoDimension1920x1080 (macOS only)
- - AgoraVideoDimension2540x1440 (macOS only)
- - AgoraVideoDimension3840x2160 (macOS only)
 
  Note:
 
@@ -577,10 +606,6 @@ Agora uses different video codecs for different profiles to optimize the user ex
 | 1920 * 1080 	| 15               	| 2080                                   	| 4160                                    	|
 | 1920 * 1080 	| 30               	| 3150                                   	| 6300                                    	|
 | 1920 * 1080 	| 60               	| 4780                                   	| 6500                                    	|
-| 2560 * 1440 	| 30               	| 4850                                   	| 6500                                    	|
-| 2560 * 1440 	| 60               	| 6500                                   	| 6500                                    	|
-| 3840 * 2160 	| 30               	| 6500                                   	| 6500                                    	|
-| 3840 * 2160 	| 60               	| 6500                                   	| 6500                                    	|
 
 
 **Note:**
@@ -678,7 +703,7 @@ In either case, Agora uses the value of this parameter to calculate the charges.
  */
 @property(assign, nonatomic) NSInteger bitrate;
 
-/** Sets whether or not to capture the mouse for screen sharing.
+/** Sets whether to capture the mouse for screen sharing.
 
 - YES: (Default) Capture the mouse.
 - NO: Do not capture the mouse.
@@ -1383,6 +1408,20 @@ The default value is 0.1. The value ranges from 0.0 (original) to 1.0. This para
 
 @end
 
+__attribute__((visibility("default"))) @interface AgoraVirtualBackgroundSource : NSObject
+
+/** The source type used to  substitude background.
+ */
+@property(nonatomic, assign) AgoraVirtualBackgroundSourceType backgroundSourceType;
+
+/** Background color value, for example: "0xaabbcc" */
+@property(nonatomic, assign) NSUInteger color;
+
+/** Background image file path */
+@property(nonatomic, copy) NSString* _Nullable source;
+
+@end
+
 /** The user information, including the user ID and user account. */
 __attribute__((visibility("default"))) @interface AgoraUserInfo : NSObject
 /** The user ID of a user.
@@ -1420,6 +1459,28 @@ __attribute__((visibility("default"))) @interface AgoraRtcChannelMediaOptions : 
  video streams in the channel.
  */
 @property(nonatomic, assign) BOOL autoSubscribeVideo;
+/** Determines whether to automatically publish audio stream
+ when the user joins a channel.
+
+ - YES: (Default) Publish.
+ - NO: Do not publish.
+
+ This member variable serves a similar function to the `muteLocalAudioStream`
+ method. After joining the channel, you can call the `muteLocalAudioStream`
+ method to set whether to publish audio stream in the channel.
+ */
+@property(nonatomic, assign) BOOL publishLocalAudio;
+/** Determines whether to automatically publish video stream
+ when the user joins a channel.
+
+ - YES: (Default) Publish.
+ - NO: Do not publish.
+
+ This member variable serves a similar function to the `muteLocalVideoStream`
+ method. After joining the channel, you can call the `muteLocalVideoStream`
+ method to set whether to publish video stream in the channel.
+ */
+@property(nonatomic, assign) BOOL publishLocalVideo;
 @end
 
 /** AgoraFacePositionInfo array.
@@ -1447,36 +1508,34 @@ __attribute__((visibility("default"))) @interface AgoraFacePositionInfo : NSObje
 @property(assign, nonatomic) NSInteger distance;
 @end
 
-/** The configuration of audio recording. */
+/** **Since** v3.4.0. Recording configuration, which is set in [startAudioRecordingWithConfig]([AgoraRtcEngineKit startAudioRecordingWithConfig:]). */
 __attribute__((visibility("default"))) @interface AgoraAudioRecordingConfiguration : NSObject
 
-/** The absolute file path of the recording file. The string of the file name is in UTF-8.
+/** The absolute path (including the filename extensions) of the recording file. For example: `/var/mobile/Containers/Data/audio.aac`.
 
- The SDK determines the storage format of the recording file by the file name suffix:
-
- - .wav: Large file size with high fidelity.
- - .aac: Small file size with low fidelity.
-
- Ensure that the directory to save the recording file exists and is writable.
+ @note Ensure that the path you specify exists and is writable.
  */
 @property(copy, nonatomic) NSString* _Nullable filePath;
 
-/** Sets the audio recording quality. See AgoraAudioRecordingQuality.
+/** Audio recording quality. See AgoraAudioRecordingQuality.
 
- @note It is effective only when the recording format is AAC.
+ @note This parameter applies for AAC files only.
  */
 @property(assign, nonatomic) AgoraAudioRecordingQuality recordingQuality;
 
-/** The position of recording. See AgoraAudioRecordingPosition.
+/** Recording content. See AgoraAudioRecordingPosition.
  */
 @property(assign, nonatomic) AgoraAudioRecordingPosition recordingPosition;
 
-/** Sets the sample rate (Hz) of the recording file. Supported values are as follows:
+/** Recording sample rate (Hz). The following values are supported:
 
  - 16000
  - (Default) 32000
  - 44100
  - 48000
+
+ @note If this parameter is set to `44100` or `48000`, for better recording effects, Agora recommends recording WAV
+ files or AAC files whose `recordingQuality` is `AgoraAudioRecordingQualityMedium` or `AgoraAudioRecordingQualityHigh`.
  */
 @property(assign, nonatomic) NSInteger recordingSampleRate;
 @end
@@ -1528,7 +1587,7 @@ __attribute__((visibility("default"))) @interface AgoraRtcEngineConfig : NSObjec
 /** The App ID issued to you by Agora. See [How to get the App ID](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id). Only users in apps with the same App ID can join the same channel and communicate with each other. Use an App ID to create only one AgoraRtcEngineKit instance.  To change your App ID, call [destroy]([AgoraRtcEngineKit destroy]) to `destroy` the current AgoraRtcEngineKit instance, and after `destroy` returns 0, call [sharedEngineWithConfig]([AgoraRtcEngineKit sharedEngineWithConfig:delegate:]) to create an AgoraRtcEngineKit instance with the new App ID.
  */
 @property(copy, nonatomic) NSString* _Nullable appId;
-/** The region for connection. This advanced feature applies to scenarios that have regional restrictions. <p>For the regions that Agora supports, see AgoraAreaCode. After specifying the region, the SDK connects to the Agora servers within that region.</p>
+/** The region for connection. This advanced feature applies to scenarios that have regional restrictions. <p>For the regions that Agora supports, see AgoraAreaCode. The area codes support bitwise operation. After specifying the region, the SDK connects to the Agora servers within that region.</p>
  */
 @property(nonatomic, assign) NSUInteger areaCode;
 /** The configuration of the log files that the SDK outputs. See AgoraLogConfig.
@@ -1561,6 +1620,7 @@ __attribute__((visibility("default"))) @interface AgoraEncryptionConfig : NSObje
 If you do not set an encryption key or set it as `nil`, you cannot use the built-in encryption, and the SDK returns `-2` (`AgoraErrorCodeInvalidArgument`).
  */
 @property(copy, nonatomic) NSString* _Nullable encryptionKey;
+@property(strong, nonatomic) NSData* _Nullable encryptionKdfSalt;
 @end
 
 /** The detailed options of a user.
@@ -1570,5 +1630,71 @@ __attribute__((visibility("default"))) @interface AgoraClientRoleOptions : NSObj
 /** The latency level of an audience member in a interactive live streaming. See [AgoraAudienceLatencyLevelType](AgoraAudienceLatencyLevelType).
  */
 @property(assign, nonatomic) AgoraAudienceLatencyLevelType audienceLatencyLevel;
+
+@end
+
+/** * The detailed of AgoraRtcVideoEncodedFrame. */
+__attribute__((visibility("default"))) @interface AgoraVideoEncodedFrame : NSObject
+
+/**
+ * The video codec: #AgoraVideoCodecType.
+ */
+@property(assign, nonatomic) AgoraVideoCodecType codecType;
+/**   * The width (px) of the video.   */
+@property(assign, nonatomic) NSInteger width;
+/**   * The height (px) of the video.   */
+@property(assign, nonatomic) NSInteger height;
+/**   * The buffer of video encoded frame   */
+@property(strong, nonatomic) NSData* _Nullable buffer;
+/**   * The frame type of the encoded video frame.  */
+@property(assign, nonatomic) AgoraVideoEncodeType frameType;
+/**   * The rotation information of the encoded video frame: #VIDEO_ORIENTATION.   */
+@property(assign, nonatomic) AgoraVideoRotation rotation;
+/**   * The timestamp for rendering the video.   */
+@property(assign, nonatomic) int64_t renderTimeMs;
+
+@end
+
+__attribute__((visibility("default"))) @interface AgoraVideoDataFrame : NSObject
+
+@property(assign, nonatomic) AgoraVideoFrameType frameType;
+/** Video pixel width.
+ */
+@property(assign, nonatomic) NSInteger width;              // width of video frame
+                                                           /** Video pixel height.
+                                                            */
+@property(assign, nonatomic) NSInteger height;             // height of video frame
+                                                           /** Line span of the Y buffer within the YUV data.
+                                                            */
+@property(assign, nonatomic) NSInteger yStride;            // stride of Y data buffer
+                                                           /** Line span of the U buffer within the YUV data.
+                                                            */
+@property(assign, nonatomic) NSInteger uStride;            // stride of U data buffer
+                                                           /** Line span of the V buffer within the YUV data.
+                                                            */
+@property(assign, nonatomic) NSInteger vStride;            // stride of V data buffer
+                                                           /** Pointer to the Y buffer pointer within the YUV data.
+                                                            */
+@property(assign, nonatomic) void* _Nullable yBuffer;      // Y data buffer
+                                                           /** Pointer to the U buffer pointer within the YUV data.
+                                                            */
+@property(assign, nonatomic) void* _Nullable uBuffer;      // U data buffer
+                                                           /** Pointer to the V buffer pointer within the YUV data.
+                                                            */
+@property(assign, nonatomic) void* _Nullable vBuffer;      // V data buffer
+                                                           /** Set the rotation of this frame before rendering the video. Supports 0, 90, 180, 270 degrees
+                                                            * clockwise.
+                                                            */
+@property(assign, nonatomic) AgoraVideoRotation rotation;  // rotation of this frame (0, 90, 180, 270)
+                                                           /** The timestamp (ms) of the external audio frame. It is mandatory. You can use this parameter
+                                                          for the following purposes:
+                                                            - Restore the order of the captured audio frame.
+                                                            - Synchronize audio and video frames in video-related scenarios, including scenarios where
+                                                          external video sources are used.
+                                                          @note This timestamp is for rendering the video stream, and not for capturing the video stream.
+                                                          */
+@property(assign, nonatomic) int64_t renderTimeMs;
+
+@property(assign, nonatomic) NSInteger avsync_type;
 
 @end

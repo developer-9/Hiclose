@@ -82,10 +82,10 @@ extern CGSize const AgoraVideoDimension1280x720;
 /** 1920 * 1080 (Hardware dependent, macOS only)
  */
 extern CGSize const AgoraVideoDimension1920x1080;
-/** 25400 * 1440 (Hardware dependent, macOS only)
+/** Reserved for future use.
  */
 extern CGSize const AgoraVideoDimension2540x1440;
-/** 3840 * 2160 (Hardware dependent, macOS only)
+/** Reserved for future use.
  */
 extern CGSize const AgoraVideoDimension3840x2160;
 #endif

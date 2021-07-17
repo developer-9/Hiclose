@@ -8,6 +8,7 @@ framework module AgoraRtcKit {
     header "AgoraObjects.h"
     header "AgoraRtcChannel.h"
     header "AgoraLogWriter.h"
+    header "AgoraVideoFrame.h"
 
     export *
 }

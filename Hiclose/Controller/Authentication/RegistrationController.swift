@@ -125,7 +125,7 @@ class RegistrationController: UIViewController {
     }
     
     @objc func backgroundTapped() {
-        self.view.endEditing(false)
+        self.view.endEditing(true)
     }
     
     @objc func textDidChanged(sender: UITextField) {

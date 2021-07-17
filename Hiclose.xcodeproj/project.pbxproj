@@ -66,6 +66,7 @@
 		6374B22C26413B3700E495A5 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6374B22B26413B3700E495A5 /* SettingsViewModel.swift */; };
 		6374B2312641400500E495A5 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6374B2302641400500E495A5 /* SettingCell.swift */; };
 		638CDD2426A2E7CF00B71591 /* InvitedRegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2326A2E7CF00B71591 /* InvitedRegistrationController.swift */; };
+		638CDD2626A32DC300B71591 /* InvitedRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */; };
 		638E1CD0265BC2510096DFDC /* SearchFriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */; };
 		638E1CD5265E62790096DFDC /* SearchUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CD4265E62790096DFDC /* SearchUserCell.swift */; };
 		638E1D0B265EBE050096DFDC /* SearchUserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */; };
@@ -170,6 +171,7 @@
 		6374B22B26413B3700E495A5 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		6374B2302641400500E495A5 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		638CDD2326A2E7CF00B71591 /* InvitedRegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRegistrationController.swift; sourceTree = "<group>"; };
+		638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRegistrationViewModel.swift; sourceTree = "<group>"; };
 		638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendsController.swift; sourceTree = "<group>"; };
 		638E1CD4265E62790096DFDC /* SearchUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserCell.swift; sourceTree = "<group>"; };
 		638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserProfileController.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 				6374B22B26413B3700E495A5 /* SettingsViewModel.swift */,
 				638E1D0F2661142C0096DFDC /* SearchUserProfileViewModel.swift */,
 				631CE4F026640FE900E2A21F /* NotificationViewModel.swift */,
+				638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -715,6 +718,7 @@
 				63ED46D825C81CE500ACC997 /* AuthenticationViewModel.swift in Sources */,
 				635E3A71268F36EE00484F5B /* NowCell.swift in Sources */,
 				6363F9E425D6ACD500AD2FEA /* ConversationViewModel.swift in Sources */,
+				638CDD2626A32DC300B71591 /* InvitedRegistrationViewModel.swift in Sources */,
 				6363F99125C9527700AD2FEA /* AuthService.swift in Sources */,
 				6342877725C4B2CC00FB5B92 /* RegistrationController.swift in Sources */,
 				635E3A6F268E7BC900484F5B /* NowCollectionView.swift in Sources */,

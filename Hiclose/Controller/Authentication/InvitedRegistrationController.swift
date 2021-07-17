@@ -11,6 +11,8 @@ class InvitedRegistrationController: UIViewController {
     
     //MARK: - Properties
     
+    private var viewModel = InviteRegistrationViewModel()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Enter your invite code🔗"
@@ -53,6 +55,7 @@ class InvitedRegistrationController: UIViewController {
         button.setDimensions(height: 52, width: 52)
         button.layer.cornerRadius = 52 / 2
         button.addTarget(self, action: #selector(handleShowRegistration), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
@@ -61,6 +64,7 @@ class InvitedRegistrationController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureNotificationObservers()
     }
     
     //MARK: - API
@@ -77,6 +81,11 @@ class InvitedRegistrationController: UIViewController {
     
     @objc func handleDismiss() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func textDidChanged(sender: UITextField) {
+        viewModel.inviteCode = sender.text
+        showSignUpButton.isEnabled = viewModel.buttonIsEnabled
     }
     
     //MARK: - Helpers
@@ -105,5 +114,9 @@ class InvitedRegistrationController: UIViewController {
         view.addSubview(showSignUpButton)
         showSignUpButton.centerX(inView: view)
         showSignUpButton.anchor(top: inputCodeTextField.bottomAnchor, paddingTop: 42)
+    }
+    
+    private func configureNotificationObservers() {
+        inputCodeTextField.addTarget(self, action: #selector(textDidChanged), for: .editingChanged)
     }
 }

@@ -9,14 +9,6 @@ import UIKit
 import JGProgressHUD
 import AVFoundation
 
-//MARK: - UITextView
-
-extension UITextView {
-    func leftSpace() {
-        textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 6, right: 4)
-    }
-}
-
 //MARK: - UIImage
 
 extension UIImage {
@@ -237,5 +229,5 @@ extension UIView {
         guard let view = superview else { return }
         anchor(top: view.topAnchor, left: view.leftAnchor,
                bottom: view.bottomAnchor, right: view.rightAnchor)
-    }
+    }    
 }

@@ -162,25 +162,26 @@ extension ProfileController: ProfileHeaderDelegate {
         textView.isSelectable = true
         textView.isEditable = false
         
-        let textString = "You've received an invitation from \(user.fullname)!!\nEnter the 🔗INVITATION CODE and connect with Takashi now!!\n\nLet's start Hiclose HERE today🔥"
+        let textString = "You've received an invitation from \(user.fullname)!!\nEnter the 🔗INVITATION CODE(\(user.uid)) and connect with Takashi now!!\n\nLet's start Hiclose HERE today🔥"
+        let profileImage = UIImage(url: user.profileImageUrl)
+        let appUrl = URL(string: "https://apps.apple.com/")!
         
-        let attributedString = NSMutableAttributedString(string: textString)
-        let codeRange = NSString(string: textString).range(of: "INVITATION CODE")
-        let urlRenge = NSString(string: textString).range(of: "HERE")
+//        let attributedString = NSMutableAttributedString(string: textString)
+//        let codeRange = NSString(string: textString).range(of: "INVITATION CODE")
+//        let urlRenge = NSString(string: textString).range(of: "HERE")
+//
+//        attributedString.addAttribute(.link, value: "https://console.firebase.google.com/u/2/project/hiclose-19909/database/hiclose-19909-default-rtdb/data?hl=ja", range: codeRange)
+//        attributedString.addAttribute(.link, value: UIApplication.openSettingsURLString, range: urlRenge)
+//        textView.attributedText = attributedString
         
-        attributedString.addAttribute(.link, value: "https://console.firebase.google.com/u/2/project/hiclose-19909/database/hiclose-19909-default-rtdb/data?hl=ja", range: codeRange)
-        attributedString.addAttribute(.link, value: UIApplication.openSettingsURLString, range: urlRenge)
-        textView.attributedText = attributedString
-        
-        let textToShare: [String] = [textView.text]
-        let activityViewController = UIActivityViewController(activityItems: textToShare,
+        let items = [textString, profileImage, appUrl] as [Any]
+        let activityViewController = UIActivityViewController(activityItems: items,
                                                               applicationActivities: nil)
         
         activityViewController.excludedActivityTypes = [UIActivity.ActivityType.airDrop,
                                                         UIActivity.ActivityType.postToFacebook]
         
         self.present(activityViewController, animated: true, completion: nil)
-
     }
     
     func presentEditProfileController() {

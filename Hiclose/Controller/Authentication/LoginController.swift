@@ -72,6 +72,15 @@ class LoginController: UIViewController {
         return button
     }()
     
+    private let haveAnInviteCodeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Have an invite code? →", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.addTarget(self, action: #selector(handleShowInvitedSignUp), for: .touchUpInside)
+        return button
+    }()
+    
     private let guestLoginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Let's try Guest Login😶‍🌫️", for: .normal)
@@ -107,6 +116,11 @@ class LoginController: UIViewController {
     }
     
     //MARK: - Actions
+    
+    @objc func handleShowInvitedSignUp() {
+        let controller = InvitedRegistrationController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
     
     @objc func handleGuestLogin() {
         let controller = GuestLoginController()
@@ -186,9 +200,13 @@ class LoginController: UIViewController {
         inputStack.anchor(top: titleLabel.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
                           paddingTop: 32, paddingLeft: 32, paddingRight: 32)
         
+        view.addSubview(haveAnInviteCodeButton)
+        haveAnInviteCodeButton.anchor(top: loginButton.bottomAnchor, right: view.rightAnchor,
+                                      paddingTop: 6, paddingRight: 42)
+        
         view.addSubview(guestLoginButton)
         guestLoginButton.centerX(inView: view)
-        guestLoginButton.anchor(top: inputStack.bottomAnchor, left: view.leftAnchor,
+        guestLoginButton.anchor(top: haveAnInviteCodeButton.bottomAnchor, left: view.leftAnchor,
                                 right: view.rightAnchor, paddingTop: 72, paddingLeft: 52,
                                 paddingRight: 52)
         

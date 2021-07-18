@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class InvitedRegistrationController: UIViewController {
     
@@ -69,12 +70,30 @@ class InvitedRegistrationController: UIViewController {
     
     //MARK: - API
     
+    private func fetchInviteUser(withUid uid: String, completion: @escaping(User) -> Void) {
+        COLLECTION_USERS.document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print("DEBUG: FAILED TO FETCH USER WITH \(error.localizedDescription)")
+                self.showLoader(false)
+                self.showError("The invitation code is incorrect or the account cannot be found.")
+                return
+            }
+            guard let dictionary = snapshot?.data() else { return }
+            let user = User(dictionary: dictionary)
+            completion(user)
+        }
+    }
+    
     //MARK: - Actions
     
     @objc func handleShowRegistration() {
-        guard let text = inputCodeTextField.text else { return }
-        let controller = RegistrationController(isInvited: true, by: text)
-        navigationController?.pushViewController(controller, animated: true)
+        guard let inviteCode = inputCodeTextField.text else { return }
+        showLoader(true)
+        fetchInviteUser(withUid: inviteCode) { user in
+            self.showLoader(false)
+            let controller = RegistrationController(isInvited: true, by: user)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
         
     @objc func handleBackgroundTapped() {

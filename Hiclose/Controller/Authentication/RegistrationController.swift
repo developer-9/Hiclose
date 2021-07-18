@@ -13,11 +13,19 @@ class RegistrationController: UIViewController {
     //MARK: - Properties
     
     private var isInvited: Bool
-    private let invitedByUid: String?
+    private let invitedBy: User?
     
     private var viewModel = RegistrationViewModel()
     weak var delegate: AuthenticationDelegate?
     private var profileImage: UIImage?
+    
+    private let backButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        return button
+    }()
     
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -90,9 +98,9 @@ class RegistrationController: UIViewController {
     
     //MARK: - Lifecycle
     
-    init(isInvited: Bool, by uid: String? = nil) {
+    init(isInvited: Bool, by user: User? = nil) {
         self.isInvited = isInvited
-        self.invitedByUid = uid
+        self.invitedBy = user
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -106,7 +114,40 @@ class RegistrationController: UIViewController {
         configureNotificationObservers()
     }
     
+    //MARK: - API
+    
+    private func registerUser(withCredential credentials: AuthCredentials,
+                              completion: ((Error?) -> Void)?) {
+        ImageUploader.uploadImage(image: credentials.profileImage) { imageUrl in
+            Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { (result, error) in
+                if let error = error {
+                    print("DEBUG: FAILED TO REGISTRATION WITH \(error.localizedDescription)")
+                    self.showLoader(false)
+                    self.showError(error.localizedDescription)
+                    return
+                }
+                
+                guard let uid = result?.user.uid else { return }
+                let data: [String: Any] = ["email": credentials.email,
+                                           "fullname": credentials.fullname,
+                                           "profileImageUrl": imageUrl,
+                                           "uid": uid,
+                                           "username": credentials.username]
+                
+                COLLECTION_USERS.document(uid).setData(data) { _ in
+                    let statusData: [String: Any] = ["status": "🎉",
+                                                     "uid": uid]
+                    COLLECTION_STATUS.document(uid).setData(statusData, completion: completion)
+                }
+            }
+        }
+    }
+    
     //MARK: - Actions
+    
+    @objc func handleDismiss() {
+        navigationController?.popViewController(animated: true)
+    }
     
     @objc func handleShowLogin() {
         navigationController?.popViewController(animated: true)
@@ -114,24 +155,24 @@ class RegistrationController: UIViewController {
     
     @objc func handleRegistration() {
         if isInvited {
-            print("DEBUG: THIS ACCOUNT IS INVITED BY \(invitedByUid)")
-        } else {
-            print("DEBUG: 🥶")
-            guard let email = emailTextField.text?.lowercased() else { return }
-            guard let password = passwordTextField.text else { return }
-            guard let fullname = fullnameTextField.text else { return }
-            guard let username = usernameTextField.text?.lowercased() else { return }
-            guard let profileImage = self.profileImage else { return }
-            
-            let credentials = AuthCredentials(email: email, password: password, fullname: fullname,
-                                              username: username, profileImage: profileImage)
-            
-            showLoader(true)
-            
-            registerUser(withCredential: credentials) { _ in
-                self.showLoader(false)
-                self.delegate?.authenticationComplete()
-            }
+            guard let user = invitedBy else { return }
+            print("DEBUG: THIS USER IS INVITED BY \(user.fullname)")
+            return
+        }
+        guard let email = emailTextField.text?.lowercased() else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = usernameTextField.text?.lowercased() else { return }
+        guard let profileImage = self.profileImage else { return }
+        
+        let credentials = AuthCredentials(email: email, password: password, fullname: fullname,
+                                          username: username, profileImage: profileImage)
+        
+        showLoader(true)
+        
+        registerUser(withCredential: credentials) { _ in
+            self.showLoader(false)
+            self.delegate?.authenticationComplete()
         }
     }
     
@@ -179,9 +220,15 @@ class RegistrationController: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped))
         view.addGestureRecognizer(tapGestureRecognizer)
         
+        view.addSubview(backButton)
+        backButton.setDimensions(height: 24, width: 24)
+        backButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
+                          paddingTop: 16, paddingLeft: 24)
+        backButton.isHidden = !isInvited
+        
         view.addSubview(plusPhotoButton)
         plusPhotoButton.centerX(inView: view)
-        plusPhotoButton.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32)
+        plusPhotoButton.anchor(top: backButton.bottomAnchor, paddingTop: 12)
         plusPhotoButton.setDimensions(height: 200, width: 200)
         
         let stack = UIStackView(arrangedSubviews: [emailContainerView, fullnameContainerView,
@@ -213,33 +260,6 @@ class RegistrationController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
-    }
-    
-    private func registerUser(withCredential credentials: AuthCredentials,
-                              completion: ((Error?) -> Void)?) {
-        ImageUploader.uploadImage(image: credentials.profileImage) { imageUrl in
-            Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { (result, error) in
-                if let error = error {
-                    print("DEBUG: FAILED TO REGISTRATION WITH \(error.localizedDescription)")
-                    self.showLoader(false)
-                    self.showError(error.localizedDescription)
-                    return
-                }
-                
-                guard let uid = result?.user.uid else { return }
-                let data: [String: Any] = ["email": credentials.email,
-                                           "fullname": credentials.fullname,
-                                           "profileImageUrl": imageUrl,
-                                           "uid": uid,
-                                           "username": credentials.username]
-                
-                COLLECTION_USERS.document(uid).setData(data) { _ in
-                    let statusData: [String: Any] = ["status": "🎉",
-                                                     "uid": uid]
-                    COLLECTION_STATUS.document(uid).setData(statusData, completion: completion)
-                }
-            }
-        }
     }
 }
 

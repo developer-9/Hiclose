@@ -73,8 +73,7 @@ class InvitedRegistrationController: UIViewController {
     
     @objc func handleShowRegistration() {
         guard let text = inputCodeTextField.text else { return }
-
-        let controller = RegistrationController()
+        let controller = RegistrationController(isInvited: true, by: text)
         navigationController?.pushViewController(controller, animated: true)
     }
         

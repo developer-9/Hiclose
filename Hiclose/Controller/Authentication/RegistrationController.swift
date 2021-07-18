@@ -12,6 +12,9 @@ class RegistrationController: UIViewController {
     
     //MARK: - Properties
     
+    private var isInvited: Bool
+    private let invitedByUid: String?
+    
     private var viewModel = RegistrationViewModel()
     weak var delegate: AuthenticationDelegate?
     private var profileImage: UIImage?
@@ -87,6 +90,16 @@ class RegistrationController: UIViewController {
     
     //MARK: - Lifecycle
     
+    init(isInvited: Bool, by uid: String? = nil) {
+        self.isInvited = isInvited
+        self.invitedByUid = uid
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -100,20 +113,25 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handleRegistration() {
-        guard let email = emailTextField.text?.lowercased() else { return }
-        guard let password = passwordTextField.text else { return }
-        guard let fullname = fullnameTextField.text else { return }
-        guard let username = usernameTextField.text?.lowercased() else { return }
-        guard let profileImage = self.profileImage else { return }
-        
-        let credentials = AuthCredentials(email: email, password: password, fullname: fullname,
-                                          username: username, profileImage: profileImage)
-        
-        showLoader(true)
-        
-        registerUser(withCredential: credentials) { _ in
-            self.showLoader(false)
-            self.delegate?.authenticationComplete()
+        if isInvited {
+            print("DEBUG: THIS ACCOUNT IS INVITED BY \(invitedByUid)")
+        } else {
+            print("DEBUG: 🥶")
+            guard let email = emailTextField.text?.lowercased() else { return }
+            guard let password = passwordTextField.text else { return }
+            guard let fullname = fullnameTextField.text else { return }
+            guard let username = usernameTextField.text?.lowercased() else { return }
+            guard let profileImage = self.profileImage else { return }
+            
+            let credentials = AuthCredentials(email: email, password: password, fullname: fullname,
+                                              username: username, profileImage: profileImage)
+            
+            showLoader(true)
+            
+            registerUser(withCredential: credentials) { _ in
+                self.showLoader(false)
+                self.delegate?.authenticationComplete()
+            }
         }
     }
     
@@ -180,6 +198,7 @@ class RegistrationController: UIViewController {
         alreadyHaveAccountButton.anchor(left: view.leftAnchor,
                                         bottom: view.safeAreaLayoutGuide.bottomAnchor,
                                         right: view.rightAnchor, paddingLeft: 32, paddingRight: 32)
+        alreadyHaveAccountButton.isHidden = isInvited
     }
     
     private func configureNotificationObservers() {

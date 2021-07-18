@@ -13,6 +13,7 @@ class InvitedRegistrationController: UIViewController {
     //MARK: - Properties
     
     private var viewModel = InviteRegistrationViewModel()
+    weak var delegate: AuthenticationDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -99,6 +100,7 @@ class InvitedRegistrationController: UIViewController {
         fetchInviteUser(withUid: inviteCode) { user in
             self.showLoader(false)
             let controller = RegistrationController(isInvited: true, by: user)
+            controller.delegate = self.delegate
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }

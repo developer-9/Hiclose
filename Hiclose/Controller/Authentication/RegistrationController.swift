@@ -143,6 +143,18 @@ class RegistrationController: UIViewController {
         }
     }
     
+    private func invitedRegistration() {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return}
+        guard let invitedUid = invitedBy?.uid else { return }
+        FriendService.friendAccept(withUid: invitedUid) { _ in
+            UserService.fetchUser(withUid: currentUid) { currentUser in
+                NotificationService.uploadNotification(toUid: invitedUid, fromUser: currentUser,
+                                                       type: .friendAccept) { _ in
+                }
+            }
+        }
+    }
+    
     //MARK: - Actions
     
     @objc func handleDismiss() {
@@ -154,12 +166,6 @@ class RegistrationController: UIViewController {
     }
     
     @objc func handleRegistration() {
-        if isInvited {
-            guard let user = invitedBy else { return }
-            print("DEBUG: THIS USER IS INVITED BY \(user.fullname)")
-            return
-        }
-        
         guard let email = emailTextField.text?.lowercased() else { return }
         guard let password = passwordTextField.text else { return }
         guard let fullname = fullnameTextField.text else { return }
@@ -170,9 +176,11 @@ class RegistrationController: UIViewController {
                                           username: username, profileImage: profileImage)
         
         showLoader(true)
-        
         registerUser(withCredential: credentials) { _ in
             self.showLoader(false)
+            if self.isInvited {
+                self.invitedRegistration()
+            }
             self.delegate?.authenticationComplete()
         }
     }

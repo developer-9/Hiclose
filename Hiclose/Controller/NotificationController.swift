@@ -25,8 +25,8 @@ class NotificationController: UITableViewController {
     private var notifications = [Notification]() {
         didSet { tableView.reloadData() }
     }
-    private var user: User?
     
+    private var user: User?
     private let notifCell = NotificationCell()
     private let headerView = NotificationHeader()
     private var isShortFormEnabled = true

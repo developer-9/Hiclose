@@ -75,12 +75,19 @@ class InvitedRegistrationController: UIViewController {
             if let error = error {
                 print("DEBUG: FAILED TO FETCH USER WITH \(error.localizedDescription)")
                 self.showLoader(false)
-                self.showError("The invitation code is incorrect or the account cannot be found.")
+                self.showError(error.localizedDescription)
                 return
             }
-            guard let dictionary = snapshot?.data() else { return }
-            let user = User(dictionary: dictionary)
-            completion(user)
+            if let snapshot = snapshot, snapshot.exists {
+                guard let dictionary = snapshot.data() else { return }
+                let user = User(dictionary: dictionary)
+                completion(user)
+            } else {
+                self.showLoader(false)
+                self.customShowError(errorTitle: "Account not found🤦🏼",
+                                     errorMessage: "Your invitation code may not be correct.")
+                return
+            }
         }
     }
     

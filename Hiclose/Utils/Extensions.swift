@@ -117,6 +117,13 @@ extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    func customShowError(errorTitle: String, errorMessage: String) {
+        let alert = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 //MARK: - UIButton

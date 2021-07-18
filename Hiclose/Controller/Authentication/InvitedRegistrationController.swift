@@ -6,20 +6,12 @@
 //
 
 import UIKit
-import RealmSwift
-
-class Code: Object {
-    @objc dynamic var code = ""
-}
 
 class InvitedRegistrationController: UIViewController {
     
     //MARK: - Properties
     
     private var viewModel = InviteRegistrationViewModel()
-    
-    let realm = try! Realm()
-    lazy var codeString = realm.objects(Code.self)
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -81,14 +73,9 @@ class InvitedRegistrationController: UIViewController {
     
     @objc func handleShowRegistration() {
         guard let text = inputCodeTextField.text else { return }
-        let code = Code()
-        code.code = text
-        try! realm.write {
-            realm.add(code)
-        }
+
         let controller = RegistrationController()
         navigationController?.pushViewController(controller, animated: true)
-        print("DEBUG: 😆 \(code.code)")
     }
         
     @objc func handleBackgroundTapped() {

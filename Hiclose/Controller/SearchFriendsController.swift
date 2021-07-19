@@ -56,7 +56,7 @@ class SearchFriendsController: UIViewController {
     private var ifNoFriendLabel2: UILabel = {
         let label = UILabel()
         label.isHidden = true
-        label.text = "友達を検索してみよう！"
+        label.text = "友達を検索してリクエストを送ろう！"
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14)

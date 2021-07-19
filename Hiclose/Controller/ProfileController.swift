@@ -163,7 +163,7 @@ extension ProfileController: ProfileHeaderDelegate {
         textView.isSelectable = true
         textView.isEditable = false
         
-        let textString = "\(user.fullname)から招待が届いています!!\n招待コード\(user.uid)を入力して今すぐ\(user.fullname)と繋がろう!\n\nさあ、あなたも今日からHicloseをはじめよう🔥"
+        let textString = "\(user.fullname)から招待が届いています！\n招待コード🔗(\(user.uid))を入力して今すぐ\(user.fullname)と繋がろう！\n\nさあ、あなたも今日からHicloseをはじめよう🔥"
         let profileImage = UIImage(url: user.profileImageUrl)
         let appUrl = URL(string: "https://apps.apple.com/")!
         

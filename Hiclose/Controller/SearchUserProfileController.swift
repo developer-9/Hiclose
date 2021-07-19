@@ -72,6 +72,7 @@ class SearchUserProfileController: UIViewController {
         super.viewDidLoad()
         configureUI()
         populateUserData()
+        checkIfUserIsMyFriend()
         checkIfUserIsRequested()
         fetchCurrentUser()
         guestOrNot()
@@ -104,6 +105,13 @@ class SearchUserProfileController: UIViewController {
         }
     }
     
+    private func checkIfUserIsMyFriend() {
+        guard let uid = viewModel?.user.uid else { return }
+        FriendService.checkIfUserIsMyFriend(uid: uid) { isMyFriend in
+            self.viewModel?.user.isMyFriend = isMyFriend
+        }
+    }
+    
     //MARK: - Actions
     
     @objc func handleFriendRequest() {
@@ -111,6 +119,7 @@ class SearchUserProfileController: UIViewController {
             guestAlert()
         } else {
             guard viewModel?.user.isRequested == false else { return }
+            guard viewModel?.user.isMyFriend == false else { return }
             guard let uid = viewModel?.user.uid else { return }
             FriendService.friendRequest(withUid: uid) { error in
                 self.viewModel?.user.isRequested = true
@@ -147,8 +156,9 @@ class SearchUserProfileController: UIViewController {
         stack.centerX(inView: profileImageView)
         
         view.addSubview(friendRequestButton)
-        friendRequestButton.anchor(top: stack.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor,
-                             paddingTop: 24, paddingLeft: 24, paddingRight: 24)
+        friendRequestButton.anchor(top: stack.bottomAnchor, left: view.leftAnchor,
+                                   right: view.rightAnchor, paddingTop: 24, paddingLeft: 24,
+                                   paddingRight: 24)
     }
     
     private func populateUserData() {

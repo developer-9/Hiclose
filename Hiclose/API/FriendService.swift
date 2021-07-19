@@ -41,6 +41,15 @@ struct FriendService {
         }
     }
     
+    static func checkIfUserIsMyFriend(uid: String, completion: @escaping(Bool) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        COLLECTION_LIST.document(currentUid).collection("friend-list").document(uid).getDocument { snapshot, error in
+            guard let isExist = snapshot?.exists else { return }
+            completion(isExist)
+        }
+    }
+    
     static func fetchMyFriends(completion: @escaping([User]) -> Void) {
         var users = [User]()
         guard let currentUid = Auth.auth().currentUser?.uid else { return }

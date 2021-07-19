@@ -15,6 +15,7 @@ struct User {
     let email: String
     
     var isRequested = false
+    var isMyFriend = false
     var location: CLLocation?
     
     init(dictionary: [String: Any]) {

@@ -43,7 +43,7 @@ class GuestLoginController: UIViewController {
     
     private let explainLabel: UILabel = {
         let label = UILabel()
-        label.text = "のぞいてみたい友達を選んでHicloseを体験してみよう!"
+        label.text = "のぞいてみたい友達を選んでHicloseを体験してみよう！"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.textAlignment = .center

@@ -52,10 +52,15 @@ class ChatController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        configureCollectionView()
         fetchMessages()
         configureNotificationObservers()
         guestOrNot()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        collectionView.frame = .init(x: 0, y: 0, width: view.frame.width,
+                                     height: view.frame.height - customInputView.frame.height)
     }
     
     override var inputAccessoryView: UIView? {
@@ -104,11 +109,10 @@ class ChatController: UICollectionViewController {
     
     //MARK: - Helpers
     
-    private func configureUI() {
+    private func configureCollectionView() {
         collectionView.backgroundColor = .backgroundColor
         collectionView.collectionViewLayout = layout
-        collectionView.frame = .init(x: 0, y: 0, width: view.frame.width,
-                                     height: view.frame.height - 87)
+
         navigationController?.navigationBar.isHidden = true
         
         collectionView.register(MessageCell.self, forCellWithReuseIdentifier: reuseIdentifier)

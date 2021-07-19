@@ -89,8 +89,7 @@ class MessageCell: UICollectionViewCell {
     
     private func configureUI() {
         addSubview(profileImageView)
-        profileImageView.anchor(left: leftAnchor, bottom: bottomAnchor,
-                                paddingLeft: 8, paddingBottom: -4)
+        profileImageView.anchor(left: leftAnchor, bottom: bottomAnchor, paddingLeft: 8)
         profileImageView.setDimensions(height: 32, width: 32)
         profileImageView.layer.cornerRadius = 32 / 2
         
@@ -120,7 +119,6 @@ class MessageCell: UICollectionViewCell {
         bubbleContainer.backgroundColor = viewModel.messageBackgroundColor
         textView.textColor = viewModel.messageTextColor
         
-        //MARK: - Fix Me -
         if !message.text.isEmpty {
             textView.text = message.text
             
@@ -132,7 +130,7 @@ class MessageCell: UICollectionViewCell {
             addSubview(imageBubbleContainer)
             imageBubbleContainer.layer.cornerRadius = 20
             imageBubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor)
-            imageBubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 120).isActive = true
+            imageBubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 160).isActive = true
             
             imageBubbleLeftAnchor = imageBubbleContainer.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 12)
             imageBubbleLeftAnchor.isActive = false
@@ -159,7 +157,7 @@ class MessageCell: UICollectionViewCell {
             addSubview(imageBubbleContainer)
             imageBubbleContainer.layer.cornerRadius = 20
             imageBubbleContainer.anchor(top: topAnchor, bottom: bottomAnchor)
-            imageBubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 120).isActive = true
+            imageBubbleContainer.widthAnchor.constraint(lessThanOrEqualToConstant: 160).isActive = true
             
             imageBubbleLeftAnchor = imageBubbleContainer.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 12)
             imageBubbleLeftAnchor.isActive = false

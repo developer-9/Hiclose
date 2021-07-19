@@ -115,7 +115,8 @@ class CustomInputAccessoryView: UIView {
         photoButton.anchor(left: leftAnchor, paddingLeft: 12)
         
         addSubview(sendButton)
-        sendButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 8, paddingRight: 16)
+        sendButton.centerY(inView: photoButton)
+        sendButton.anchor(right: rightAnchor, paddingRight: 16)
         sendButton.setDimensions(height: 40, width: 40)
         
         addSubview(messageInputTextView)

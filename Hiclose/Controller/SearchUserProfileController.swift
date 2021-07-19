@@ -173,6 +173,7 @@ class SearchUserProfileController: UIViewController {
         guard let viewModel = viewModel else { return }
         friendRequestButton.setTitle(viewModel.requestButtonText, for: .normal)
         friendRequestButton.setTitleColor(viewModel.requestButtonTextColor, for: .normal)
+        friendRequestButton.layer.borderColor = viewModel.requestButtonBorderColor.cgColor
         friendRequestButton.backgroundColor = viewModel.requestButtonBackgroundColor
     }
 }

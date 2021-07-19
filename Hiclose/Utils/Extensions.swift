@@ -92,8 +92,9 @@ extension UIViewController {
     }
     
     func tbd() {
-        let alert = UIAlertController(title: "Oops!!", message: "Currently under development🔥", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "I'm Looking forward to it!", style: .default, handler: nil))
+        let alert = UIAlertController(title: "✋🏽Oops✋🏽", message: "この機能は現在開発中です🔥",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
     

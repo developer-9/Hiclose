@@ -27,9 +27,9 @@ class InvitedRegistrationController: UIViewController {
     private lazy var inputCodeTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .none
-        tf.font = UIFont.systemFont(ofSize: 24)
+        tf.font = UIFont.systemFont(ofSize: 20)
         tf.textColor = .white
-        tf.attributedPlaceholder = NSAttributedString(string: "Invited code here..",
+        tf.attributedPlaceholder = NSAttributedString(string: "招待コードを入力..",
                                                       attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         tf.keyboardAppearance = .dark
         tf.layer.cornerRadius = 5
@@ -85,8 +85,8 @@ class InvitedRegistrationController: UIViewController {
                 completion(user)
             } else {
                 self.showLoader(false)
-                self.customShowError(errorTitle: "Account not found🤦🏼",
-                                     errorMessage: "Your invitation code may not be correct.")
+                self.customShowError(errorTitle: "Account not found🤚🏽",
+                                     errorMessage: "招待コードが正しくないかもしれません")
                 return
             }
         }

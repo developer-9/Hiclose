@@ -188,7 +188,7 @@ extension NotificationController: PanModalPresentable {
 extension NotificationController: NotificationCellDelegate {
     func presentGuestAlert() {
         let alert = UIAlertController(title: "✋🏽Oops✋🏽",
-                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!!",
+                                      message:"この機能を楽しむにはあなたのアカウントを作る必要があります!",
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Sing In", style: .default, handler: { _ in
             let controller = IntroController()

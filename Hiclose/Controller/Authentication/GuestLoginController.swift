@@ -45,7 +45,7 @@ class GuestLoginController: UIViewController {
         let label = UILabel()
         label.text = "のぞいてみたい友達を選んでHicloseを体験してみよう!"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 16, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.textAlignment = .center
         return label
     }()

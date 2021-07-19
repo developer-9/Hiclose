@@ -123,7 +123,8 @@ extension ProfileController {
         case .rateUs: return tbd()
         case .compliments: return tbd()
         case .logout:
-            let alert = UIAlertController(title: nil, message: "本当にログアウトしますか？", preferredStyle: .actionSheet)
+            let alert = UIAlertController(title: nil, message: "本当にログアウトしますか？",
+                                          preferredStyle: .actionSheet)
             
             alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
                 self.dismiss(animated: true) {
@@ -162,7 +163,7 @@ extension ProfileController: ProfileHeaderDelegate {
         textView.isSelectable = true
         textView.isEditable = false
         
-        let textString = "You've received an invitation from \(user.fullname)!!\nEnter the 🔗INVITATION CODE(\(user.uid)) and connect with Takashi now!!\n\nLet's start Hiclose HERE today🔥"
+        let textString = "\(user.fullname)から招待が届いています!!\n招待コード\(user.uid)を入力して今すぐ\(user.fullname)と繋がろう!\n\nさあ、あなたも今日からHicloseをはじめよう🔥"
         let profileImage = UIImage(url: user.profileImageUrl)
         let appUrl = URL(string: "https://apps.apple.com/")!
         

@@ -74,9 +74,9 @@ class LoginController: UIViewController {
     
     private let haveAnInviteCodeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Have an invite code? →", for: .normal)
+        button.setTitle("招待コードをお持ちですか? →", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.addTarget(self, action: #selector(handleShowInvitedSignUp), for: .touchUpInside)
         return button
     }()

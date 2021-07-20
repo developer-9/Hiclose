@@ -144,7 +144,7 @@ class RegistrationController: UIViewController {
     }
     
     private func invitedRegistration() {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return}
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
         guard let invitedUid = invitedBy?.uid else { return }
         FriendService.friendAccept(withUid: invitedUid) { _ in
             UserService.fetchUser(withUid: currentUid) { currentUser in

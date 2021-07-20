@@ -25,9 +25,11 @@ struct FriendService {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
         UserService.fetchUser(withUid: uid) { friend in
-            let data: [String: Any] = ["boredNow": false]
-            COLLECTION_LIST.document(currentUid).collection("friend-list").document(uid).setData(data) { _ in
-                COLLECTION_LIST.document(uid).collection("friend-list").document(currentUid).setData(data, completion: completion)
+            BoredNowService.fetchMyFriendIsBoredNow(uid: friend.uid) { boredNow in
+                let data: [String: Any] = ["boredNow": boredNow.boredNow]
+                COLLECTION_LIST.document(currentUid).collection("friend-list").document(uid).setData(data) { _ in
+                    COLLECTION_LIST.document(uid).collection("friend-list").document(currentUid).setData(data, completion: completion)
+                }
             }
         }
     }

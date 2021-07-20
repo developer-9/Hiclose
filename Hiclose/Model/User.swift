@@ -26,11 +26,3 @@ struct User {
         self.email = dictionary["email"] as? String ?? ""
     }
 }
-
-struct BoredNow {
-    var boredNow: Bool
-    
-    init(dictionary: [String: Any]) {
-        self.boredNow = dictionary["boredNow"] as? Bool ?? false
-    }
-}

@@ -29,15 +29,6 @@ struct BoredNowService {
         COLLECTION_BOREDNOW.document(currentUid).setData(data, completion: completion)
     }
     
-    static func checkMyBoredNowBool(completion: @escaping(BoredNow) -> Void) {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        COLLECTION_BOREDNOW.document(currentUid).getDocument { snapshot, error in
-            guard let dictionary = snapshot?.data() else { return }
-            let boredNow = BoredNow(dictionary: dictionary)
-            completion(boredNow)
-        }
-    }
-    
     static func fetchBoredNowFromMyFriends(completion: @escaping([User]) -> Void) {
         var friends = [User]()
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
@@ -51,6 +42,14 @@ struct BoredNowService {
                     completion(friends)
                 }
             }
+        }
+    }
+    
+    static func fetchMyFriendIsBoredNow(uid: String, completion: @escaping(BoredNow) -> Void) {
+        COLLECTION_BOREDNOW.document(uid).getDocument { snapshot, error in
+            guard let dictionary = snapshot?.data() else { return }
+            let boredNow = BoredNow(dictionary: dictionary)
+            completion(boredNow)
         }
     }
 }

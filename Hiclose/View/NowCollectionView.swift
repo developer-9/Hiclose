@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 private let reuseIdentifier = "NowCell"
 
@@ -83,18 +84,35 @@ class NowCollectionView: UICollectionView {
     }
     
     func checkMyBoredNowBool() {
-        BoredNowService.checkMyBoredNowBool { boredNow in
+        checkMyBoredNowBool { boredNow in
             self.boredNowBool = boredNow.boredNow
+            self.reloadData()
         }
     }
     
     private func updateBoredNowToFriends() {
         BoredNowService.updateBoredNowToFriends(boredNow: boredNowBool) { _ in
+            self.reloadData()
         }
     }
     
     private func updateMyBoredNowBool() {
         BoredNowService.updateMyBoredNowBool(withBool: boredNowBool) { _ in
+        }
+    }
+    
+    private func checkMyBoredNowBool(completion: @escaping(BoredNow) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        COLLECTION_BOREDNOW.document(currentUid).getDocument { snapshot, error in
+            if let snapshot = snapshot, snapshot.exists {
+                guard let dictionary = snapshot.data() else { return }
+                let boredNow = BoredNow(dictionary: dictionary)
+                completion(boredNow)
+            } else {
+                self.boredNowLabel.text = "Tap Me!"
+                self.boredNowView.backgroundColor = .black
+                print("DEBUG: 👳🏻‍♂️")
+            }
         }
     }
     
@@ -134,13 +152,11 @@ class NowCollectionView: UICollectionView {
     private func populateBoredNowView() {
         if boredNowBool {
             boredNowLabel.text = "Bored Now"
-            boredNowLabel.textColor = .white
             boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                                  colors: [.systemPurple, .blue])
             boredNowView.layer.borderColor = .none
         } else {
             boredNowLabel.text = "Busy Now"
-            boredNowLabel.textColor = .white
             boredNowView.backgroundColor = .black
             boredNowView.layer.borderColor = UIColor.white.cgColor
             boredNowView.layer.borderWidth = 1.25

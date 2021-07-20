@@ -28,7 +28,6 @@ class ProfileHeader: UIView {
     }
     private var guestBool: Bool!
     weak var delegate: ProfileHeaderDelegate?
-    private let gradient = CAGradientLayer()
     
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
@@ -122,7 +121,6 @@ class ProfileHeader: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        gradient.frame = bounds
         guestOrNot()
         fetchStatus()
     }

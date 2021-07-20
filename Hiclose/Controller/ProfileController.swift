@@ -24,17 +24,10 @@ class ProfileController: UITableViewController {
         didSet { headerView.user = user }
     }
     
-//
-//    private var guestBool: Bool! {
-//        didSet {
-//            headerView.guestBool = guestBool
-//            footerView.guestBool = guestBool
-//        }
-//    }
-    private lazy var headerView = ProfileHeader(frame: .init(x: 0, y: 0,
-                                                        width: view.frame.width, height: 420))
-    private lazy var footerView = ProfileFooter(frame: .init(x: 0, y: 0,
-                                                        width: view.frame.width, height: 128))
+    private lazy var headerView = ProfileHeader(frame: CGRect(x: 0, y: 0,
+                                                              width: UIScreen.main.bounds.width,
+                                                              height: UIScreen.main.bounds.height / 2))
+    private let footerView = ProfileFooter()
     
     //MARK: - Lifecycle
     
@@ -42,7 +35,6 @@ class ProfileController: UITableViewController {
         super.viewDidLoad()
         configureUI()
         fetchCurrentUser()
-//        guestOrNot()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +46,7 @@ class ProfileController: UITableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         fetchCurrentUser()
-//        guestOrNot()
+        footerView.frame = CGRect(x: 0, y: view.frame.height - 100, width: view.frame.width, height: 60)
     }
     
     //MARK: - API
@@ -66,12 +58,6 @@ class ProfileController: UITableViewController {
         }
     }
     
-//    private func guestOrNot() {
-//        UserService.guestOrNot { bool in
-//            self.guestBool = bool
-//        }
-//    }
-    
     //MARK: - Helpers
     
     private func configureUI() {
@@ -82,14 +68,8 @@ class ProfileController: UITableViewController {
         tableView.register(ProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.rowHeight = 64
-        
         tableView.tableFooterView = footerView
         footerView.delegate = self
-    }
-    
-    private func copyMyUid() {
-        guard let user = user else { return }
-        UIPasteboard.general.string = "\(user.uid)"
     }
 }
 
@@ -136,9 +116,6 @@ extension ProfileController {
             present(alert, animated: true, completion: nil)
         }
     }
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
-    }    
 }
 
 //MARK: - ProfileHeaderDelegate

@@ -117,6 +117,8 @@ class SearchUserProfileController: UIViewController {
     @objc func handleFriendRequest() {
         if self.guestBool {
             guestAlert()
+        } else if viewModel?.user.isMyFriend == true {
+            tbd()
         } else {
             guard viewModel?.user.isRequested == false else { return }
             guard viewModel?.user.isMyFriend == false else { return }

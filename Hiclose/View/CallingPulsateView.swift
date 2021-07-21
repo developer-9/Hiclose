@@ -33,12 +33,12 @@ class CallingPulsateView: UIView {
     
     private func circleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let center = CGPoint(x: 0, y: 32)
+        let center = CGPoint(x: 0, y: 0)
         let circularPath = UIBezierPath(arcCenter: center, radius: self.frame.width / 2.5,
                                         startAngle: -(.pi / 2), endAngle: 1.5 * .pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 12
+        layer.lineWidth = 1
         layer.fillColor = fillColor.cgColor
         layer.lineCap = .round
         layer.position = self.center

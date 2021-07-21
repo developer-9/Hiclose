@@ -27,19 +27,42 @@ class NowCollectionView: UICollectionView {
     weak var nowDelegate: NowCollectionViewDelegate?
     private var guestBool: Bool!
     
+    private lazy var boredNowPulsateView: CallingPulsateView = {
+        let frame = CGRect(x: 0, y: 0, width: 72, height: 72)
+        let cp = CallingPulsateView(frame: frame)
+        
+        cp.addSubview(boredNowView)
+//        boredNowView.setDimensions(height: 198, width: 198)
+//        boredNowView.layer.cornerRadius = 198 / 2
+        boredNowView.centerX(inView: cp)
+        boredNowView.centerY(inView: cp)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBoredNow))
+        cp.addGestureRecognizer(tap)
+        return cp
+    }()
+    
     private lazy var boredNowView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.setDimensions(height: 60, width: 60)
         view.layer.cornerRadius = 60 / 2
-        view.layer.masksToBounds = true
+//        view.layer.shadowRadius = 4
+//        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        view.layer.shadowColor = UIColor.white.cgColor
+//        view.layer.shadowOpacity = 0.6
         
+//        view.clipsToBounds = true
+
         view.addSubview(boredNowLabel)
         boredNowLabel.centerY(inView: view)
         boredNowLabel.centerX(inView: view)
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBoredNow))
-        view.addGestureRecognizer(tap)
+//        view.addSubview(boredNowIconView)
+//        boredNowIconView.anchor(bottom: view.bottomAnchor, right: view.rightAnchor)
+        
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBoredNow))
+//        view.addGestureRecognizer(tap)
         return view
     }()
     
@@ -53,6 +76,17 @@ class NowCollectionView: UICollectionView {
         label.setDimensions(height: 50, width: 50)
         return label
     }()
+    
+    private let boredNowIconView: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "repeat", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .light))?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.backgroundColor = .black
+        button.tintColor = .white
+        button.setDimensions(height: 30, width: 30)
+        button.layer.cornerRadius = 30 / 2
+        button.addTarget(self, action: #selector(handleBoredNow), for: .touchUpInside)
+        return button
+    }()
         
     //MARK: - Lifecycle
     
@@ -62,6 +96,7 @@ class NowCollectionView: UICollectionView {
         fetchBoredNowFromMyFriends()
         checkMyBoredNowBool()
         guestOrNot()
+        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.3)
     }
     
     required init?(coder: NSCoder) {
@@ -118,6 +153,10 @@ class NowCollectionView: UICollectionView {
     
     //MARK: - Ations
     
+    @objc func animatePulsating() {
+        boredNowPulsateView.animatePulsatingLayer()
+    }
+    
     @objc func handleBoredNow(_ sender: UITapGestureRecognizer) {
         if self.guestBool {
             nowDelegate?.presentGuestAlert()
@@ -144,9 +183,10 @@ class NowCollectionView: UICollectionView {
         backgroundColor = .backgroundColor
         register(NowCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        addSubview(boredNowView)
-        boredNowView.centerY(inView: self)
-        boredNowView.anchor(left: leftAnchor, paddingLeft: 10)
+        addSubview(boredNowPulsateView)
+        boredNowPulsateView.setDimensions(height: 72, width: 72)
+        boredNowPulsateView.centerY(inView: self)
+        boredNowPulsateView.anchor(left: leftAnchor, paddingLeft: 10)
     }
     
     private func populateBoredNowView() {
@@ -154,7 +194,6 @@ class NowCollectionView: UICollectionView {
             boredNowLabel.text = "Bored Now"
             boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                                  colors: [.systemPurple, .blue])
-            boredNowView.layer.borderColor = .none
         } else {
             boredNowLabel.text = "Busy Now"
             boredNowView.backgroundColor = .black

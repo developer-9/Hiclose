@@ -46,12 +46,6 @@ class NowCollectionView: UICollectionView {
         view.backgroundColor = .black
         view.setDimensions(height: 60, width: 60)
         view.layer.cornerRadius = 60 / 2
-//        view.layer.shadowRadius = 4
-//        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        view.layer.shadowColor = UIColor.white.cgColor
-//        view.layer.shadowOpacity = 0.6
-        
-//        view.clipsToBounds = true
 
         view.addSubview(boredNowLabel)
         boredNowLabel.centerY(inView: view)

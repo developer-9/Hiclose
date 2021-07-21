@@ -24,7 +24,7 @@ class NowCell: UICollectionViewCell {
         iv.setDimensions(height: 60, width: 60)
         iv.layer.borderColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                      colors: [.systemPurple, .blue]).cgColor
-        iv.layer.borderWidth = 2.25
+        iv.layer.borderWidth = 2.5
         return iv
     }()
     

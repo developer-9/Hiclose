@@ -27,18 +27,17 @@ class NowCollectionView: UICollectionView {
     weak var nowDelegate: NowCollectionViewDelegate?
     private var guestBool: Bool!
     
-    private lazy var boredNowPulsateView: CallingPulsateView = {
+    private lazy var boredNowPulsateView: BoredNowPulsateView = {
         let frame = CGRect(x: 0, y: 0, width: 72, height: 72)
-        let cp = CallingPulsateView(frame: frame)
+        let cp = BoredNowPulsateView(frame: frame)
         
         cp.addSubview(boredNowView)
-//        boredNowView.setDimensions(height: 198, width: 198)
-//        boredNowView.layer.cornerRadius = 198 / 2
         boredNowView.centerX(inView: cp)
         boredNowView.centerY(inView: cp)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleBoredNow))
         cp.addGestureRecognizer(tap)
+        
         return cp
     }()
     
@@ -57,12 +56,7 @@ class NowCollectionView: UICollectionView {
         view.addSubview(boredNowLabel)
         boredNowLabel.centerY(inView: view)
         boredNowLabel.centerX(inView: view)
-        
-//        view.addSubview(boredNowIconView)
-//        boredNowIconView.anchor(bottom: view.bottomAnchor, right: view.rightAnchor)
-        
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(handleBoredNow))
-//        view.addGestureRecognizer(tap)
+
         return view
     }()
     
@@ -79,7 +73,8 @@ class NowCollectionView: UICollectionView {
     
     private let boredNowIconView: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "repeat", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .light))?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(systemName: "repeat",
+                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .light))?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.backgroundColor = .black
         button.tintColor = .white
         button.setDimensions(height: 30, width: 30)
@@ -96,11 +91,16 @@ class NowCollectionView: UICollectionView {
         fetchBoredNowFromMyFriends()
         checkMyBoredNowBool()
         guestOrNot()
-        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.3)
+        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.5)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.5)
     }
     
     //MARK: - API
@@ -146,7 +146,6 @@ class NowCollectionView: UICollectionView {
             } else {
                 self.boredNowLabel.text = "Tap Me!"
                 self.boredNowView.backgroundColor = .black
-                print("DEBUG: 👳🏻‍♂️")
             }
         }
     }
@@ -194,6 +193,8 @@ class NowCollectionView: UICollectionView {
             boredNowLabel.text = "Bored Now"
             boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                                  colors: [.systemPurple, .blue])
+            boredNowView.layer.borderColor = UIColor.black.cgColor
+            boredNowView.layer.borderWidth = 1
         } else {
             boredNowLabel.text = "Busy Now"
             boredNowView.backgroundColor = .black
@@ -237,6 +238,6 @@ extension NowCollectionView: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 84, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 88, bottom: 0, right: 0)
     }
 }

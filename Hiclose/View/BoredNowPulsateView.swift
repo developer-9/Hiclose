@@ -1,13 +1,13 @@
 //
-//  CallingPulsateView.swift
+//  BoredNowPulsateView.swift
 //  Hiclose
 //
-//  Created by Taisei Sakamoto on 2021/06/26.
+//  Created by Taisei Sakamoto on 2021/07/21.
 //
 
 import UIKit
 
-class CallingPulsateView: UIView {
+class BoredNowPulsateView: UIView {
     
     //MARK: - Properties
     
@@ -27,13 +27,13 @@ class CallingPulsateView: UIView {
     //MARK: - Helpers
     
     private func configureCircleLayer() {
-        pulsatingLayer = circleShapeLayer(strokeColor: .clear, fillColor: .pulsatingFillColor)
+        pulsatingLayer = circleShapeLayer(strokeColor: .clear, fillColor: .init(white: 1, alpha: 0.6))
         layer.addSublayer(pulsatingLayer)
     }
     
     private func circleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let center = CGPoint(x: 0, y: 32)
+        let center = CGPoint(x: 0, y: 0)
         let circularPath = UIBezierPath(arcCenter: center, radius: self.frame.width / 2.5,
                                         startAngle: -(.pi / 2), endAngle: 1.5 * .pi, clockwise: true)
         layer.path = circularPath.cgPath
@@ -48,8 +48,8 @@ class CallingPulsateView: UIView {
     
     func animatePulsatingLayer() {
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        animation.toValue = 1.25
-        animation.duration = 0.8
+        animation.toValue = 1.15
+        animation.duration = 1
         animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         animation.autoreverses = true
         animation.repeatCount = Float.infinity

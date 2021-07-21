@@ -68,6 +68,7 @@
 		638CDD2426A2E7CF00B71591 /* InvitedRegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2326A2E7CF00B71591 /* InvitedRegistrationController.swift */; };
 		638CDD2626A32DC300B71591 /* InvitedRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */; };
 		638CDD2826A766EA00B71591 /* BoredNow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2726A766E800B71591 /* BoredNow.swift */; };
+		638CDD2A26A7E81900B71591 /* BoredNowPulsateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */; };
 		638E1CD0265BC2510096DFDC /* SearchFriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */; };
 		638E1CD5265E62790096DFDC /* SearchUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CD4265E62790096DFDC /* SearchUserCell.swift */; };
 		638E1D0B265EBE050096DFDC /* SearchUserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */; };
@@ -174,6 +175,7 @@
 		638CDD2326A2E7CF00B71591 /* InvitedRegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRegistrationController.swift; sourceTree = "<group>"; };
 		638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRegistrationViewModel.swift; sourceTree = "<group>"; };
 		638CDD2726A766E800B71591 /* BoredNow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNow.swift; sourceTree = "<group>"; };
+		638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNowPulsateView.swift; sourceTree = "<group>"; };
 		638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendsController.swift; sourceTree = "<group>"; };
 		638E1CD4265E62790096DFDC /* SearchUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserCell.swift; sourceTree = "<group>"; };
 		638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserProfileController.swift; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 				635E3A6A268C9A4B00484F5B /* DummyAccountView.swift */,
 				635E3A6E268E7BC900484F5B /* NowCollectionView.swift */,
 				635E3A70268F36EC00484F5B /* NowCell.swift */,
+				638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -739,6 +742,7 @@
 				63CBDB2B26872BF500785FBA /* CallingPulsateView.swift in Sources */,
 				6363F9D025D4496C00AD2FEA /* Message.swift in Sources */,
 				631CE4E22663788A00E2A21F /* NotificationController.swift in Sources */,
+				638CDD2A26A7E81900B71591 /* BoredNowPulsateView.swift in Sources */,
 				635E7BFE264119EB00843987 /* SettingsController.swift in Sources */,
 				6363F9B725D02F2D00AD2FEA /* ChatController.swift in Sources */,
 				635E7BE7263802DF00843987 /* EmojiCell.swift in Sources */,

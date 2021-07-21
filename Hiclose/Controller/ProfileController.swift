@@ -144,14 +144,6 @@ extension ProfileController: ProfileHeaderDelegate {
         let profileImage = UIImage(url: user.profileImageUrl)
         let appUrl = URL(string: "https://apps.apple.com/")!
         
-//        let attributedString = NSMutableAttributedString(string: textString)
-//        let codeRange = NSString(string: textString).range(of: "INVITATION CODE")
-//        let urlRenge = NSString(string: textString).range(of: "HERE")
-//
-//        attributedString.addAttribute(.link, value: "https://console.firebase.google.com/u/2/project/hiclose-19909/database/hiclose-19909-default-rtdb/data?hl=ja", range: codeRange)
-//        attributedString.addAttribute(.link, value: UIApplication.openSettingsURLString, range: urlRenge)
-//        textView.attributedText = attributedString
-        
         let items = [textString, profileImage, appUrl] as [Any]
         let activityViewController = UIActivityViewController(activityItems: items,
                                                               applicationActivities: nil)

@@ -181,7 +181,6 @@ class VideoController: UIViewController {
         super.viewDidLoad()
         configureUI()
         self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.3)
-//        initializeAgoraEngine()
         setupVideo()
         setupLocalVideo()
         joinChannel()
@@ -269,10 +268,6 @@ class VideoController: UIViewController {
         nameLabel.text = user.fullname
         profileImageView.sd_setImage(with: url, completed: nil)
     }
-    
-//    private func initializeAgoraEngine() {
-//        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: AppID, delegate: self)
-//    }
     
     private func setupVideo() {
         agoraKit?.enableVideo()

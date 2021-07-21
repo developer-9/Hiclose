@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol EditProfileControllerDelegate: class {
+protocol EditProfileControllerDelegate: AnyObject {
     func updateUserInfoComplete()
 }
 

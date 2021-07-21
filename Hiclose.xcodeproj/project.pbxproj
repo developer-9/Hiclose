@@ -334,8 +334,8 @@
 				638E1D19266271940096DFDC /* NotificationService.swift */,
 				631CE4F526651ED700E2A21F /* FriendService.swift */,
 				631CE52B26695ADB00E2A21F /* LocationService.swift */,
-				635E3A722690F18300484F5B /* BoredNowService.swift */,
 				635E3A742697339400484F5B /* CallingService.swift */,
+				635E3A722690F18300484F5B /* BoredNowService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";

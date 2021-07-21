@@ -24,26 +24,26 @@ struct AuthService {
         Auth.auth().signIn(withEmail: email, password: password, completion: completion)
     }
     
-//    static func registerUser(withCredential credentials: AuthCredentials,
-//                             completion: ((Error?) -> Void)?) {
-//        ImageUploader.uploadImage(image: credentials.profileImage) { imageUrl in
-//            Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { (result, error) in
-//                if let error = error {
-//                    print("DEBUG: FAILED TO REGISTRATION WITH \(error.localizedDescription)")
-//                    return
-//                }
-//                guard let uid = result?.user.uid else { return }
-//                
-//                let data = ["email": credentials.email,
-//                            "fullname": credentials.fullname,
-//                            "profileImageUrl": imageUrl,
-//                            "uid": uid,
-//                            "username": credentials.username] as [String: Any]
-//                
-//                COLLECTION_USERS.document(uid).setData(data, completion: completion)
-//            }
-//        }
-//    }
+    static func registerUser(withCredential credentials: AuthCredentials,
+                             completion: ((Error?) -> Void)?) {
+        ImageUploader.uploadImage(image: credentials.profileImage) { imageUrl in
+            Auth.auth().createUser(withEmail: credentials.email, password: credentials.password) { (result, error) in
+                if let error = error {
+                    print("DEBUG: FAILED TO REGISTRATION WITH \(error.localizedDescription)")
+                    return
+                }
+                guard let uid = result?.user.uid else { return }
+                
+                let data = ["email": credentials.email,
+                            "fullname": credentials.fullname,
+                            "profileImageUrl": imageUrl,
+                            "uid": uid,
+                            "username": credentials.username] as [String: Any]
+                
+                COLLECTION_USERS.document(uid).setData(data, completion: completion)
+            }
+        }
+    }
     
     static func dummyAccountLogin(withUsername username: String, completion: AuthDataResultCallback?) {
         let email = username + "@email.com"

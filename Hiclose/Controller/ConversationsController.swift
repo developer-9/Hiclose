@@ -98,6 +98,7 @@ class ConversationsController: UICollectionViewController {
         fetchConversations()
         nowCollectionView.fetchBoredNowFromMyFriends()
         nowCollectionView.checkMyBoredNowBool()
+        nowCollectionView.animatePulsating()
         nowCollectionView.guestOrNot()
     }
     

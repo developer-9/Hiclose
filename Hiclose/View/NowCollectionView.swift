@@ -85,16 +85,10 @@ class NowCollectionView: UICollectionView {
         fetchBoredNowFromMyFriends()
         checkMyBoredNowBool()
         guestOrNot()
-        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.5)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.5)
     }
     
     //MARK: - API

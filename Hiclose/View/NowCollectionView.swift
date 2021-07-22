@@ -159,7 +159,7 @@ class NowCollectionView: UICollectionView {
             }
             updateMyBoredNowBool()
             updateBoredNowToFriends()
-            reloadData()
+            self.perform(#selector(animatePulsating), with: nil, afterDelay: 0.5)
         }
     }
         

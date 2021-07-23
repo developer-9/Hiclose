@@ -69,11 +69,11 @@ struct MessageService {
         }
     }
         
-    static func fetchConversations(completion: @escaping([Conversation]) -> Void) {
+    static func fetchConversationsWithFirstMessage(completion: @escaping([Conversation]) -> Void) {
         var conversations = [Conversation]()
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
-        let query = COLLECTION_MESSAGES.document(uid).collection("recent-messages")
+        let query = COLLECTION_MESSAGES.document(currentUid).collection("recent-messages")
             .order(by: "timestamp")
         query.addSnapshotListener { (snapshot, error) in
             guard let snapshot = snapshot else { return }
@@ -81,7 +81,7 @@ struct MessageService {
                 uploadMessageFromHicloseAccount { _ in
                 }
             }
-            snapshot.documentChanges.forEach({ change in
+            snapshot.documentChanges.forEach { change in
                 let dictionary = change.document.data()
                 let message = Message(dictionary: dictionary)
                 
@@ -90,7 +90,26 @@ struct MessageService {
                     conversations.append(conversation)
                     completion(conversations)
                 }
-            })
+            }
+        }
+    }
+    
+    static func fetchConversations(completion: @escaping([Conversation]) -> Void) {
+        var conversations = [Conversation]()
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+        let query = COLLECTION_MESSAGES.document(currentUid).collection("recent-messages").order(by: "timestamp")
+        query.addSnapshotListener { snapshot, error in
+            guard let snapshot = snapshot else { return }
+            snapshot.documentChanges.forEach { change in
+                let dictionary = change.document.data()
+                let message = Message(dictionary: dictionary)
+                
+                UserService.fetchUser(withUid: message.chatPartnerId) { user in
+                    let conversation = Conversation(user: user, message: message)
+                    conversations.append(conversation)
+                }
+            }
         }
     }
 }

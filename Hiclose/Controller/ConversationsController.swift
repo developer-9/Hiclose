@@ -86,7 +86,7 @@ class ConversationsController: UICollectionViewController {
         super.viewDidLoad()
         authenticateUser()
         configureUI()
-        fetchConversations()
+        fetchConversationsWithFirstMessage()
         fetchCallingIndicator()
     }
     
@@ -139,9 +139,6 @@ class ConversationsController: UICollectionViewController {
     }
     
     @objc func handleRefresh() {
-//        conversations.removeAll()
-//        conversationsDictionary.removeAll()
-//        fetchConversations()
         nowCollectionView.fetchBoredNowFromMyFriends()
         nowCollectionView.checkMyBoredNowBool()
         nowCollectionView.guestOrNot()
@@ -170,13 +167,26 @@ class ConversationsController: UICollectionViewController {
         }
     }
     
+    private func fetchConversationsWithFirstMessage() {
+        MessageService.fetchConversationsWithFirstMessage { conversations in
+            conversations.forEach { conversation in
+                let message = conversation.message
+                self.conversationsDictionary[message.chatPartnerId] = conversation
+            }
+
+            self.conversations = Array(self.conversationsDictionary.values)
+            self.conversations = self.conversations.sorted(by: { $0.message.timestamp.dateValue() > $1.message.timestamp.dateValue() })
+            self.collectionView.reloadData()
+        }
+    }
+    
     private func fetchConversations() {
         MessageService.fetchConversations { conversations in
             conversations.forEach { conversation in
                 let message = conversation.message
                 self.conversationsDictionary[message.chatPartnerId] = conversation
             }
-
+            
             self.conversations = Array(self.conversationsDictionary.values)
             self.conversations = self.conversations.sorted(by: { $0.message.timestamp.dateValue() > $1.message.timestamp.dateValue() })
             self.collectionView.reloadData()
@@ -395,7 +405,7 @@ extension ConversationsController: NewMessageAnimationControllerDelegate {
 extension ConversationsController: IntroControllerDelegate {
     func configure() {
         configureUI()
-        fetchConversations()
+        fetchConversationsWithFirstMessage()
     }
 }
 

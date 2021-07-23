@@ -12,6 +12,7 @@ private let reuseIdentifier = "NowCell"
 
 protocol  NowCollectionViewDelegate: AnyObject {
     func presentGuestAlert()
+    func showBoredNowController()
 }
 
 class NowCollectionView: UICollectionView {
@@ -210,7 +211,7 @@ extension NowCollectionView: UICollectionViewDataSource {
 
 extension NowCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("DEBUG: DID SELECT ITEM AT")
+        nowDelegate?.showBoredNowController()
     }
 }
 

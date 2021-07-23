@@ -74,14 +74,6 @@ class ConversationsController: UICollectionViewController {
     
     //MARK: - Lifecycle
     
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(collectionViewLayout: layout)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         authenticateUser()
@@ -432,6 +424,11 @@ extension ConversationsController: VideoControllerDelegate {
 //MARK: - NowCollectionViewDelegate
 
 extension ConversationsController: NowCollectionViewDelegate {
+    func showBoredNowController() {
+        let controller = BoredNowController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     func presentGuestAlert() {
         let alert = UIAlertController(title: "✋🏽Oops✋🏽",
                                       message:"この機能を楽しむにはあなたのアカウントを作る必要があります！",

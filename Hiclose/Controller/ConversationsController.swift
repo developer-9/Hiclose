@@ -20,7 +20,6 @@ class ConversationsController: UICollectionViewController {
     private var calling: Calling?
     private let gradientLayer = CAGradientLayer()
     private let refresher = UIRefreshControl()
-    private var header = ConversationHeader()
     private var conversations = [Conversation]()
     private var conversationsDictionary = [String : Conversation]()
     

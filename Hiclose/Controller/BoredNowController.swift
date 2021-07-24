@@ -8,6 +8,7 @@
 import UIKit
 
 private let reuseIdentifier = "BoredNowCell"
+private let headerIdentifier = "BoredNowHeader"
 
 class BoredNowController: UICollectionViewController {
     
@@ -31,6 +32,7 @@ class BoredNowController: UICollectionViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.showsVerticalScrollIndicator = false
         collectionView.register(BoredNowCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(BoredNowHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
     }
 }
 
@@ -44,6 +46,11 @@ extension BoredNowController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! BoredNowCell
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! BoredNowHeader
+        return header
     }
 }
 
@@ -71,5 +78,9 @@ extension BoredNowController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 120)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 100)
     }
 }

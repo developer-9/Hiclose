@@ -11,6 +11,12 @@ class BoredNowHeader: UICollectionReusableView {
     
     //MARK: - Properties
     
+    private let backView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+    
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -25,6 +31,6 @@ class BoredNowHeader: UICollectionReusableView {
     //MARK: - Helpers
     
     private func configureUI() {
-        backgroundColor = .red
+        backgroundColor = .backgroundColor
     }
 }

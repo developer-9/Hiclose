@@ -47,6 +47,8 @@ class BoredNowCell: UICollectionViewCell {
         iv.image = #imageLiteral(resourceName: "profileImageTest1")
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
+        iv.setDimensions(height: 60, width: 60)
+        iv.layer.cornerRadius = 60 / 2
         return iv
     }()
     
@@ -98,5 +100,14 @@ class BoredNowCell: UICollectionViewCell {
         backCircleView.centerX(inView: self)
         backCircleView.centerY(inView: self)
         backCircleView.setDimensions(height: 120, width: self.frame.width - 20)
+        
+        addSubview(boredNowView)
+        boredNowView.centerY(inView: self)
+        boredNowView.anchor(left: leftAnchor, paddingLeft: 24)
+        
+        addSubview(profileImageView)
+        profileImageView.centerY(inView: self)
+        profileImageView.anchor(left: leftAnchor, paddingLeft: 24)
+        
     }
 }

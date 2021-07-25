@@ -12,7 +12,10 @@ class NowCell: UICollectionViewCell {
     //MARK: - Properties
     
     var viewModel: UserCellViewModel? {
-        didSet { populateProfileImageView() }
+        didSet {
+            populateProfileImageView()
+            fetchStatus()
+        }
     }
     
     private let profileImageView: UIImageView = {
@@ -28,6 +31,29 @@ class NowCell: UICollectionViewCell {
         return iv
     }()
     
+    private lazy var statusView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.setDimensions(height: 24, width: 24)
+        view.layer.cornerRadius = 24 / 2
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowRadius = 1
+        view.layer.shadowOffset = CGSize(width: 1, height: 1)
+        view.layer.shadowOpacity = 0.5
+        
+        view.addSubview(statusLabel)
+        statusLabel.centerY(inView: view)
+        statusLabel.centerX(inView: view)
+        return view
+    }()
+    
+    private var statusLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.text = "🎉"
+        return label
+    }()
+    
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -38,13 +64,25 @@ class NowCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
+    //MARK: - API
+    
+    private func fetchStatus() {
+        guard let uid = viewModel?.user.uid else { return }
+        StatusService.fetchStatus(withUid: uid) { status in
+            self.statusLabel.text = status.status
+        }
+    }
+    
     //MARK: - Helpers
     
     private func configureUI() {
         addSubview(profileImageView)
         profileImageView.centerX(inView: self)
         profileImageView.centerY(inView: self)
+        
+        addSubview(statusView)
+        statusView.anchor(bottom: profileImageView.bottomAnchor, right: profileImageView.rightAnchor)
     }
     
     private func populateProfileImageView() {

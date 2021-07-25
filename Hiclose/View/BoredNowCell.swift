@@ -72,10 +72,20 @@ class BoredNowCell: UICollectionViewCell {
         label.text = "🎉"
         return label
     }()
+    
     private let fullnameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
+        label.text = "Fullname"
         label.font = UIFont.systemFont(ofSize: 16)
+        return label
+    }()
+    
+    private let usernameLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .lightGray
+        label.text = "username"
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     
@@ -101,13 +111,20 @@ class BoredNowCell: UICollectionViewCell {
         backCircleView.centerY(inView: self)
         backCircleView.setDimensions(height: 120, width: self.frame.width - 20)
         
-        addSubview(boredNowView)
-        boredNowView.centerY(inView: self)
-        boredNowView.anchor(left: leftAnchor, paddingLeft: 24)
-        
         addSubview(profileImageView)
         profileImageView.centerY(inView: self)
         profileImageView.anchor(left: leftAnchor, paddingLeft: 24)
         
+        addSubview(boredNowView)
+        boredNowView.centerY(inView: self)
+        boredNowView.anchor(left: profileImageView.rightAnchor, paddingLeft: 16)
+        
+        let stack = UIStackView(arrangedSubviews: [fullnameLabel, usernameLabel])
+        stack.axis = .vertical
+        stack.spacing = 16
+        
+        addSubview(stack)
+        stack.centerY(inView: self)
+        stack.anchor(left: boredNowView.rightAnchor, paddingLeft: 16)
     }
 }

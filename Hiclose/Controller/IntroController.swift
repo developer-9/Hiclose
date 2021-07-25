@@ -30,7 +30,7 @@ class IntroController: UIViewController {
         button.layer.shadowOffset = CGSize(width: 1, height: 1)
         button.layer.shadowOpacity = 0.5
         button.layer.cornerRadius = 12
-        button.backgroundColor = .mainBlueTint
+        button.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60), colors: [.systemPurple, .blue])
         button.addTarget(self, action: #selector(presentLoginView), for: .touchUpInside)
         return button
     }()

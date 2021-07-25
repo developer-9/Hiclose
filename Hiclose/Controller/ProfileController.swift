@@ -67,6 +67,7 @@ class ProfileController: UITableViewController {
         headerView.delegate = self
         tableView.register(ProfileCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.isScrollEnabled = false
         tableView.rowHeight = 64
         tableView.tableFooterView = footerView
         footerView.delegate = self

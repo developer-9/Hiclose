@@ -89,7 +89,7 @@ class LoginController: UIViewController {
         button.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
         button.layer.cornerRadius = 50 / 2
         button.layer.borderColor = UIColor.gradientColor(size: CGSize(width: 120, height: 50),
-                                                         colors: [.cyan, .magenta]).cgColor
+                                                         colors: [.magenta, .cyan]).cgColor
         button.layer.borderWidth = 2
         button.setHeight(50)
         button.addTarget(self, action: #selector(handleGuestLogin), for: .touchUpInside)

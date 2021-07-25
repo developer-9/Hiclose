@@ -69,9 +69,6 @@
 		638CDD2626A32DC300B71591 /* InvitedRegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */; };
 		638CDD2826A766EA00B71591 /* BoredNow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2726A766E800B71591 /* BoredNow.swift */; };
 		638CDD2A26A7E81900B71591 /* BoredNowPulsateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */; };
-		638CDD2C26AB59A400B71591 /* BoredNowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2B26AB59A300B71591 /* BoredNowController.swift */; };
-		638CDD2E26AB7E6900B71591 /* BoredNowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2D26AB7E6800B71591 /* BoredNowCell.swift */; };
-		638CDD3026AB9E0900B71591 /* BoredNowHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638CDD2F26AB9E0900B71591 /* BoredNowHeader.swift */; };
 		638E1CD0265BC2510096DFDC /* SearchFriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */; };
 		638E1CD5265E62790096DFDC /* SearchUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1CD4265E62790096DFDC /* SearchUserCell.swift */; };
 		638E1D0B265EBE050096DFDC /* SearchUserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */; };
@@ -179,9 +176,6 @@
 		638CDD2526A32DC300B71591 /* InvitedRegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRegistrationViewModel.swift; sourceTree = "<group>"; };
 		638CDD2726A766E800B71591 /* BoredNow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNow.swift; sourceTree = "<group>"; };
 		638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNowPulsateView.swift; sourceTree = "<group>"; };
-		638CDD2B26AB59A300B71591 /* BoredNowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNowController.swift; sourceTree = "<group>"; };
-		638CDD2D26AB7E6800B71591 /* BoredNowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNowCell.swift; sourceTree = "<group>"; };
-		638CDD2F26AB9E0900B71591 /* BoredNowHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoredNowHeader.swift; sourceTree = "<group>"; };
 		638E1CCF265BC2510096DFDC /* SearchFriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendsController.swift; sourceTree = "<group>"; };
 		638E1CD4265E62790096DFDC /* SearchUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserCell.swift; sourceTree = "<group>"; };
 		638E1D0A265EBE050096DFDC /* SearchUserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserProfileController.swift; sourceTree = "<group>"; };
@@ -365,7 +359,6 @@
 				631CE4E12663788A00E2A21F /* NotificationController.swift */,
 				631CE4FA2668CA1E00E2A21F /* MapController.swift */,
 				63CBDB242682114F00785FBA /* VideoController.swift */,
-				638CDD2B26AB59A300B71591 /* BoredNowController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -414,8 +407,6 @@
 				635E3A6E268E7BC900484F5B /* NowCollectionView.swift */,
 				635E3A70268F36EC00484F5B /* NowCell.swift */,
 				638CDD2926A7E81800B71591 /* BoredNowPulsateView.swift */,
-				638CDD2D26AB7E6800B71591 /* BoredNowCell.swift */,
-				638CDD2F26AB9E0900B71591 /* BoredNowHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -707,7 +698,6 @@
 				6363F9F325D9CBD100AD2FEA /* ProfileViewModel.swift in Sources */,
 				63F4DC9F25C457A900B0CF5D /* AppDelegate.swift in Sources */,
 				63651985262323BB00E8D8A8 /* FriendProfileController.swift in Sources */,
-				638CDD2C26AB59A400B71591 /* BoredNowController.swift in Sources */,
 				6342877C25C4B89A00FB5B92 /* Extensions.swift in Sources */,
 				6363F99625C9528700AD2FEA /* ImageUploader.swift in Sources */,
 				6342876F25C4B2BD00FB5B92 /* LoginController.swift in Sources */,
@@ -749,14 +739,12 @@
 				6363F9C625D169B200AD2FEA /* CustomInputAccessoryView.swift in Sources */,
 				63F4DCA125C457A900B0CF5D /* SceneDelegate.swift in Sources */,
 				635E7BCE263417B500843987 /* EditProfileController.swift in Sources */,
-				638CDD2E26AB7E6900B71591 /* BoredNowCell.swift in Sources */,
 				63CBDB2B26872BF500785FBA /* CallingPulsateView.swift in Sources */,
 				6363F9D025D4496C00AD2FEA /* Message.swift in Sources */,
 				631CE4E22663788A00E2A21F /* NotificationController.swift in Sources */,
 				638CDD2A26A7E81900B71591 /* BoredNowPulsateView.swift in Sources */,
 				635E7BFE264119EB00843987 /* SettingsController.swift in Sources */,
 				6363F9B725D02F2D00AD2FEA /* ChatController.swift in Sources */,
-				638CDD3026AB9E0900B71591 /* BoredNowHeader.swift in Sources */,
 				635E7BE7263802DF00843987 /* EmojiCell.swift in Sources */,
 				635E3A6B268C9A4B00484F5B /* DummyAccountView.swift in Sources */,
 				631CE5312669646B00E2A21F /* FriendAnnotation.swift in Sources */,

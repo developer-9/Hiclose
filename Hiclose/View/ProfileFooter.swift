@@ -24,7 +24,7 @@ class ProfileFooter: UIView {
         button.setTitle("Choose Status🔥", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = #colorLiteral(red: 0.4916501836, green: 0.3148621215, blue: 0.9376518726, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0.5351785577, green: 0.3240287099, blue: 0.9376518726, alpha: 1)
         button.layer.cornerRadius = 25
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowRadius = 1

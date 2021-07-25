@@ -66,7 +66,7 @@ class ConversationsController: UICollectionViewController {
         button.setTitle("Go to Map 🗺", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0.3813195229, green: 0.2757785618, blue: 0.9383082986, alpha: 1)
+        button.backgroundColor = .systemPurple
         button.addTarget(self, action: #selector(handleMap), for: .touchUpInside)
         return button
     }()

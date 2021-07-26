@@ -64,18 +64,6 @@ class NowCollectionView: UICollectionView {
         label.setDimensions(height: 50, width: 50)
         return label
     }()
-    
-    private let boredNowIconView: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "repeat",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .light))?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.backgroundColor = .black
-        button.tintColor = .white
-        button.setDimensions(height: 30, width: 30)
-        button.layer.cornerRadius = 30 / 2
-        button.addTarget(self, action: #selector(handleBoredNow), for: .touchUpInside)
-        return button
-    }()
         
     //MARK: - Lifecycle
     
@@ -182,7 +170,7 @@ class NowCollectionView: UICollectionView {
             boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                                  colors: [.systemPurple, .blue])
             boredNowView.layer.borderColor = UIColor.black.cgColor
-            boredNowView.layer.borderWidth = 1            
+            boredNowView.layer.borderWidth = 1
         } else {
             boredNowLabel.text = "Busy Now"
             boredNowLabel.textColor = .white

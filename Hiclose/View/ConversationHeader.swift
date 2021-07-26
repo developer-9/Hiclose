@@ -33,6 +33,13 @@ class ConversationHeader: UICollectionReusableView {
         return label
     }()
     
+    private var statusLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text = "🎉"
+        return label
+    }()
+    
     private lazy var profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.backgroundColor = .lightGray
@@ -62,6 +69,7 @@ class ConversationHeader: UICollectionReusableView {
     override func layoutSubviews() {
         super.layoutSubviews()
         fetchCurrentUser()
+        fetchStatus()
     }
     
     //MARK: - API
@@ -70,6 +78,13 @@ class ConversationHeader: UICollectionReusableView {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         UserService.fetchUser(withUid: uid) { user in
             self.user = user
+        }
+    }
+    
+    private func fetchStatus() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        StatusService.fetchStatus(withUid: uid) { status in
+            self.statusLabel.text = status.status
         }
     }
     
@@ -92,6 +107,10 @@ class ConversationHeader: UICollectionReusableView {
         profileImageView.layer.cornerRadius = 40 / 2
         profileImageView.centerY(inView: titleLabel)
         profileImageView.anchor(right: rightAnchor, paddingRight: 20)
+        
+        addSubview(statusLabel)
+        statusLabel.anchor(bottom: profileImageView.bottomAnchor, right: profileImageView.leftAnchor,
+                           paddingBottom: 3, paddingRight: 6)
     }
     
     private func populateProfileImage() {

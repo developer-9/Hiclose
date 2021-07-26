@@ -66,7 +66,7 @@ class ConversationsController: UICollectionViewController {
         button.setTitle("Go to Map 🗺", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemPurple
+        button.backgroundColor = #colorLiteral(red: 0.6068018079, green: 0.2939791679, blue: 0.8860545158, alpha: 1)
         button.addTarget(self, action: #selector(handleMap), for: .touchUpInside)
         return button
     }()
@@ -423,11 +423,6 @@ extension ConversationsController: VideoControllerDelegate {
 //MARK: - NowCollectionViewDelegate
 
 extension ConversationsController: NowCollectionViewDelegate {
-    func showBoredNowController() {
-        let controller = BoredNowController(collectionViewLayout: UICollectionViewFlowLayout())
-        navigationController?.pushViewController(controller, animated: true)
-    }
-    
     func presentGuestAlert() {
         let alert = UIAlertController(title: "✋🏽Oops✋🏽",
                                       message:"この機能を楽しむにはあなたのアカウントを作る必要があります！",

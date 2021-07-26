@@ -23,17 +23,18 @@ class NowCell: UICollectionViewCell {
         iv.backgroundColor = .lightGray
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
-        iv.layer.cornerRadius = 60 / 2
+        iv.layer.cornerRadius = 58 / 2
         iv.setDimensions(height: 60, width: 60)
         iv.layer.borderColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                      colors: [.systemPurple, .blue]).cgColor
-        iv.layer.borderWidth = 2.5
+        iv.layer.borderWidth = 2.25
         return iv
     }()
     
     private lazy var statusView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.gradientColor(size: CGSize(width: 24, height: 24),
+                                                     colors: [.systemPurple, .blue])
         view.setDimensions(height: 24, width: 24)
         view.layer.cornerRadius = 24 / 2
         view.layer.shadowColor = UIColor.black.cgColor
@@ -49,7 +50,7 @@ class NowCell: UICollectionViewCell {
     
     private var statusLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 10)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.text = "🎉"
         return label
     }()

@@ -12,7 +12,6 @@ private let reuseIdentifier = "NowCell"
 
 protocol  NowCollectionViewDelegate: AnyObject {
     func presentGuestAlert()
-    func showBoredNowController()
 }
 
 class NowCollectionView: UICollectionView {
@@ -183,10 +182,12 @@ class NowCollectionView: UICollectionView {
             boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
                                                                  colors: [.systemPurple, .blue])
             boredNowView.layer.borderColor = UIColor.black.cgColor
-            boredNowView.layer.borderWidth = 1
+            boredNowView.layer.borderWidth = 1            
         } else {
             boredNowLabel.text = "Busy Now"
-            boredNowView.backgroundColor = .black
+            boredNowLabel.textColor = .white
+            boredNowView.backgroundColor = UIColor.gradientColor(size: CGSize(width: 60, height: 60),
+                                                                 colors: [.darkGray, .backgroundColor])
             boredNowView.layer.borderColor = UIColor.white.cgColor
             boredNowView.layer.borderWidth = 1.25
         }
@@ -211,7 +212,6 @@ extension NowCollectionView: UICollectionViewDataSource {
 
 extension NowCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        nowDelegate?.showBoredNowController()
     }
 }
 

@@ -19,7 +19,6 @@ class ChooseStatusController: UICollectionViewController {
     //MARK: - Properties
     
     weak var delegate: ChooseStatusControllerDelegate?
-    
     private var isShortFormEnabled = true
         
     //MARK: - Lifecycle

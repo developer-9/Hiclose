@@ -7,7 +7,7 @@
 想定している友達数：　10人〜25人程度のクローズドなコミュニティ
 
 ## 使用した技術
-アーキテクチャ：　MVVM
+アーキテクチャ：　MVVM  
 ライブラリ：　Firebase, SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit
 
 ## 使用イメージ

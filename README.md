@@ -9,7 +9,7 @@
 ## 使用した技術
 アーキテクチャ：　MVVM  
 ライブラリ：　SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit  
-データベース: Firestore
+データベース:　Firestore
 
 ## 使用イメージ
 ![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)

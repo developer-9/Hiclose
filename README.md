@@ -8,7 +8,8 @@
 
 ## 使用した技術
 アーキテクチャ：　MVVM  
-ライブラリ：　Firebase, SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit
+ライブラリ：　SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit  
+DB: Firestore
 
 ## 使用イメージ
 ![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
@@ -28,7 +29,7 @@
 - [x] その他SNSに必要な機能(友達の追加承認リクエスト、ブロック、検索、報告、プロフィール編集等)
 
 ## App Store
-AppStoreにリリースしているアプリはこちらの機能と多少異なります
+AppStoreにリリースしているアプリはこちらの機能と多少異なります。
 
 ## このアプリに込めた想い
 このアプリの名前である「Hiclose」という由来は、英語でClose(親しい)という言葉にHi(High)を組み合わせた造語です。  
@@ -45,4 +46,5 @@ AppStoreにリリースしているアプリはこちらの機能と多少異な
 
 ## 今後の展望
 ・FRPへの移行
+・ビデオ通話の本番環境化
 

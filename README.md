@@ -9,7 +9,7 @@
 ## 使用した技術
 アーキテクチャ：　MVVM  
 ライブラリ：　SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit  
-DB: Firestore
+データベース: Firestore
 
 ## 使用イメージ
 ![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
@@ -41,7 +41,7 @@ AppStoreにリリースしているアプリはこちらの機能と多少異な
 ## アイコンに込めた想い
 ![Hiclose icon](https://user-images.githubusercontent.com/55890106/132989880-d9762f23-c074-40e5-bfce-8890ed89f8ae.png)  
 アイコンの配色はこのアプリ内で使われるカラーを使用しています。  
-全体的なイメージはHicloseの頭文字「H」と、友達に会いに行く人の後ろ姿(下半身)を表現しました。
+全体的なイメージはHicloseの頭文字「H」と、友達に会いに行く人の後ろ姿(下半身)を表現しデザインしました。
 
 
 ## 今後の展望

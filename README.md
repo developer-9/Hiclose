@@ -11,8 +11,9 @@
 ライブラリ：　Firebase, SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit
 
 ## 使用イメージ
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991063-edf9e056-698c-473a-b605-ac538fca9703.png)
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991063-edf9e056-698c-473a-b605-ac538fca9703.png)
+![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991087-e7637a4c-e1d7-4213-b1c6-acb2e5cc58ed.png)
+![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991087-e7637a4c-e1d7-4213-b1c6-acb2e5cc58ed.png)
+
 
 ## 実装されている機能
 - [x] 1対1のチャット機能

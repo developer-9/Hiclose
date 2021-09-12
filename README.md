@@ -11,11 +11,11 @@
 ライブラリ：　Firebase, SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit
 
 ## 使用イメージ
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132990819-3d29046d-bac3-4772-866d-3fc8317e94e5.png)  
-![Apple iPhone 11 Pro Max Screenshot 1](https://user-images.githubusercontent.com/55890106/132990825-9f276330-5429-4fc8-92c1-106acf12b624.png)  
-![Apple iPhone 11 Pro Max Screenshot 2](https://user-images.githubusercontent.com/55890106/132990833-e0412502-b8d0-48c4-a1ef-bbfd598cea92.png)  
-![Apple iPhone 11 Pro Max Screenshot 3](https://user-images.githubusercontent.com/55890106/132990846-a5391a48-6895-46b2-8399-6bc71fccf6d7.png)  
-![Apple iPhone 11 Pro Max Screenshot 4](https://user-images.githubusercontent.com/55890106/132990856-15fa77df-1618-4c8c-ae9e-7f9eea560bc7.png)  
+![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132990819-3d29046d-bac3-4772-866d-3fc8317e94e5.png)
+![Apple iPhone 11 Pro Max Screenshot 1](https://user-images.githubusercontent.com/55890106/132990825-9f276330-5429-4fc8-92c1-106acf12b624.png)
+![Apple iPhone 11 Pro Max Screenshot 2](https://user-images.githubusercontent.com/55890106/132990833-e0412502-b8d0-48c4-a1ef-bbfd598cea92.png)
+![Apple iPhone 11 Pro Max Screenshot 3](https://user-images.githubusercontent.com/55890106/132990846-a5391a48-6895-46b2-8399-6bc71fccf6d7.png)
+![Apple iPhone 11 Pro Max Screenshot 4](https://user-images.githubusercontent.com/55890106/132990856-15fa77df-1618-4c8c-ae9e-7f9eea560bc7.png)
 ## 実装されている機能
 - [x] 1対1のチャット機能
 - [x] ステータス機能
@@ -41,6 +41,5 @@ AppStoreにリリースしているアプリはこちらの機能と多少異な
 
 
 ## 今後の展望
-
-## 
+・FRPへの移行
 

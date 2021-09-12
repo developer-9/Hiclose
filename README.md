@@ -1,4 +1,4 @@
-# Hiclose Beta
+# Hiclose Beta🔥
 親しい友達とのコミュニケーションアプリ
 
 ## アプリ概要

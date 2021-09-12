@@ -34,7 +34,7 @@ AppStoreにリリースしているアプリはこちらの機能と多少異な
 ワカモノがこのアプリを通じて一つでも多く思い出を作って頂ければ開発者にとってこの上ない幸せです。  
 
 ## アイコンに込めた想い
-![Hiclose icon](https://user-images.githubusercontent.com/55890106/132989666-405ee4a0-3351-498d-87fb-160b9adc3b40.png)
+![Hiclose icon](https://user-images.githubusercontent.com/55890106/132989847-7a5edcc3-f12e-448c-8119-1dbd9ac62d9b.png)
 
 
 

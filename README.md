@@ -4,7 +4,7 @@
 ## アプリ概要
 使用目的：　今暇している友達と遊びに行くためのツール  
 主なターゲット：　Z世代の学生  
-想定している友達数：　10人〜25人程度のクローズドなコミュニティ  
+想定している友達数：　5人〜20人程度のクローズドなコミュニティ  
 
 ## 使用した技術
 アーキテクチャ：　MVVM  
@@ -12,10 +12,11 @@
 
 ## 使用イメージ
 ![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
-![Apple iPhone 11 Pro Max Screenshot 0](https://user-images.githubusercontent.com/55890106/132991281-b884f3c7-f633-4f47-8a66-290583c9a76a.png)
+![Apple iPhone 11 Pro Max Screenshot 1](https://user-images.githubusercontent.com/55890106/132991468-97deedca-0a79-4120-af22-3665e8c0dcea.png)
+![Apple iPhone 11 Pro Max Screenshot 2](https://user-images.githubusercontent.com/55890106/132991471-4b55542d-c6f4-409b-a629-0477fb6c1b70.png)
+![Apple iPhone 11 Pro Max Screenshot 3](https://user-images.githubusercontent.com/55890106/132991475-7204ac8e-ab28-48ad-89f4-9072c84d18fb.png)
+![Apple iPhone 11 Pro Max Screenshot 4](https://user-images.githubusercontent.com/55890106/132991476-302770e1-2d9c-4a92-a2a7-ec2ec55c1c11.png)
+
 
 
 ## 実装されている機能

@@ -11,6 +11,7 @@
 ライブラリ：　Firebase, SDWebImage, JGProgressHUD, PanModal, GeoFire, AgoraRtcEngine, IndicateKit
 
 ## 使用イメージ
+![スクリーンショット 2021-06-08 23 46 13](https://user-images.githubusercontent.com/55890106/132989008-48a2b799-16f5-4696-9df0-10f7720a97ba.png)
 
 ## 機能の説明
 
